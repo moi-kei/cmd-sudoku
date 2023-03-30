@@ -12,36 +12,38 @@ Console.WriteLine("case does not matter, sqares encased between _ _ cannot be ch
 while (game)
 {
     board.PrintSudoku();
+    string? input = Console.ReadLine();
 
-    while(true)
+    if (input == "quit")
     {
-        string? input = Console.ReadLine();
-
-        if (input == "quit")
-        {
-            game = false;
-            break;
-        }
-        else if (input.Length == 4)
+        game = false;
+    }
+    else if (input.Length == 4)
+    {
+        try
         {
             board.AddEntry(input);
-            break;
         }
-        else if(input == "check")
-        {
-            if(board.CheckSudoku() == true)
-            {
-                Console.WriteLine("Game Completed");
-                game = false;
-            }
-            else
-            {
-                Console.WriteLine("Game not Completed");
-            }
-        }
-        else
+        catch
         {
             Console.WriteLine("invalid input");
         }
     }
+    else if(input == "check")
+    {
+        if(board.CheckSudoku() == true)
+        {
+            Console.WriteLine("Game Completed");
+            game = false;
+        }
+        else
+        {
+            Console.WriteLine("Game not Completed");
+        }
+    }
+    else
+    {
+        Console.WriteLine("invalid input");
+    }
+    
 }

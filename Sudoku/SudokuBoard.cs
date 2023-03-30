@@ -167,7 +167,7 @@ namespace Sudoku
 
                 if(i%3 == 0)
                 {
-                    x = x + 21;
+                    x += 21;
                 }
                 else
                 {
