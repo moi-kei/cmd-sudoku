@@ -189,7 +189,7 @@ namespace Sudoku
 
             int offset = row * 9 + column -1;
 
-            if (startingNumbers[offset] == '0')
+            if (startingNumbers[offset] == '0' && row != -1)
             {
                 if (entry == '1' || entry == '2' || entry == '3' || entry == '4' || entry == '5' || entry == '6' || entry == '7' || entry == '8' || entry == '9')
                 {
@@ -211,13 +211,13 @@ namespace Sudoku
         private static int RowToInt(char header)
         {
             char[] rows = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I' };
-            int value = 0;
+            int value = -1;
 
             for(int i = 0; i < rows.Length; ++i)
             {
                 if(header == rows[i])
                 {
-                    value = i; ;
+                    value = i;
                 }
             }
             return value;
