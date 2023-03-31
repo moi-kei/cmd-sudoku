@@ -5,11 +5,11 @@ namespace Sudoku
 {
     internal class SudokuBoard
     {
-        private readonly string startingNumbers;
-        public string LastChanged;
+        private readonly string startingNumbers;      
         public string Board { get; set; }
-        public int GameID { get; set; }
+        public int GameID { get; }
         public bool IsComplete {  get; set; }
+        public string LastChanged { get; set; }
         private List<string> game;
 
         public SudokuBoard(string difficulty)
@@ -18,6 +18,7 @@ namespace Sudoku
             Board = generator.GeneratePuzzle(difficulty);
             GameID = GetID(); 
             IsComplete = false;
+            LastChanged = "";
             game = new List<string>();
 
             StringBuilder str = new StringBuilder();
@@ -120,7 +121,7 @@ namespace Sudoku
                 var rowCheck = new List<char>();
                 for (int j = 0; j < 9; j++)
                 {
-                    if (!rowCheck.Contains(Board[i]) && Board[i] != '_')
+                    if (!rowCheck.Contains(Board[i]) && Board[i] != ' ')
                     {
                         rowCheck.Add(Board[i]);
                     }
@@ -181,16 +182,17 @@ namespace Sudoku
         public void AddEntry(string input)
         {
             input = input.ToUpper();
-            int row = RowToInt(input[0]);
-            int column = input[1] - '0';
+            int column = ColumnToInt(input[0]);
+            int row = input[1] - '0';
             char entry = input[3];
 
-            int offset = row * 9 + column -1;
+            int offset = (row * 9)  + column -9;
 
-            if (startingNumbers[offset] == '0' && row != -1)
+            if (startingNumbers[offset] == '0')
             {
                 if (entry == '1' || entry == '2' || entry == '3' || entry == '4' || entry == '5' || entry == '6' || entry == '7' || entry == '8' || entry == '9')
                 {
+                    AddMove(input);
                     StringBuilder newBoard = new StringBuilder(Board);
                     newBoard[offset] = entry;
                     Board = newBoard.ToString();
@@ -206,10 +208,11 @@ namespace Sudoku
             }
         }
 
-        public void AddMove(String input)
+        private void AddMove(String input)
         {
             StringBuilder str = new StringBuilder(input);
-            str[4] = Board[getIndex(input)];
+            str[3] = Board[getIndex(input)];
+            LastChanged = str.ToString();
 
             game.Add(input);
         }
@@ -233,13 +236,13 @@ namespace Sudoku
         private int getIndex(string input)
         {
             input = input.ToUpper();
-            int row = RowToInt(input[0]);
+            int row = ColumnToInt(input[0]);
             int column = input[1] - '0';
 
             return row * 9 + column - 1;
         }
 
-        private int RowToInt(char header)
+        private static int ColumnToInt(char header)
         {
             char[] rows = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I' };
             int value = -1;

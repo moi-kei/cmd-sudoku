@@ -46,7 +46,6 @@ internal class Program
                         try
                         {
                             board.AddEntry(input);
-
                         }
                         catch
                         {
@@ -89,7 +88,7 @@ internal class Program
     private static void GameMenu()
     {
         Console.WriteLine("enter check to check if the puzzle is complete");
-        Console.WriteLine("enter a number with the form [row][column] [number] (i.e A9 3)");
+        Console.WriteLine("enter a number with the form [column][row] [number] (i.e A9 3)");
         Console.WriteLine("case does not matter, sqares encased between _ _ cannot be changed");
         Console.WriteLine("enter q to exit to main menu\n");
     }
