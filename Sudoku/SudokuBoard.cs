@@ -1,34 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using System.Web;
 
 namespace Sudoku
 {
     internal class SudokuBoard
     {
-        private string initialBoardDone = "53467891267219534819834256785976142342685379171392485696153728428741963534528617_";
-        private string initialBoard = "__49____7_______5__6_1_59_2____9____5_27536__69_2_8___94_______2__5____813__497__";
-
-        private string startingNumbers;
+        private readonly string startingNumbers;
+        public string LastChanged;
         public string Board { get; set; }
         public int GameID { get; set; }
-
+        public bool IsComplete {  get; set; }
         private List<string> game;
 
-        public SudokuBoard()
+        public SudokuBoard(string difficulty)
         {
             SudokuGenerator generator = new SudokuGenerator();  
-            this.Board = generator.GeneratePuzzle();
-            GameID = 0; 
-            StringBuilder str = new StringBuilder();
+            Board = generator.GeneratePuzzle(difficulty);
+            GameID = GetID(); 
+            IsComplete = false;
+            game = new List<string>();
 
-            foreach(char c in Board)
+            StringBuilder str = new StringBuilder();
+            foreach (char c in Board)
             {
-                if(c == '_')
+                if(c == ' ')
                 {
                     str.Append('0');
                 }
@@ -43,7 +38,7 @@ namespace Sudoku
         public void PrintSudoku()
         {
             Console.WriteLine("    A   B   C   D   E   F   G   H   I");
-            Console.WriteLine("  +-----------+-----------+-----------+");
+            Console.WriteLine("  +===========+===========+===========+");
             int rowID = 1;
 
             for (int i = 1; i < Board.Length; ++i)
@@ -83,10 +78,18 @@ namespace Sudoku
                         }
                     }
                 }
+
                 Console.WriteLine("|");
+                
+                if (i % 27 == 0)
                 {
-                    if (i % 3 == 0) Console.WriteLine("  +-----------+-----------+-----------+");
+                    Console.WriteLine("  +===========+===========+===========+");
                 }
+                else if (i % 3 == 0)
+                {
+                    Console.WriteLine("  +-----------+-----------+-----------+");
+                }
+                
             }
         }
 
@@ -172,9 +175,6 @@ namespace Sudoku
                     x += 3;
                 }
             }
-
-            
-
             return true;
         }
 
@@ -206,22 +206,15 @@ namespace Sudoku
             }
         }
 
-        private static int RowToInt(char header)
+        public void AddMove(String input)
         {
-            char[] rows = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I' };
-            int value = -1;
+            StringBuilder str = new StringBuilder(input);
+            str[4] = Board[getIndex(input)];
 
-            for(int i = 0; i < rows.Length; ++i)
-            {
-                if(header == rows[i])
-                {
-                    value = i;
-                }
-            }
-            return value;
+            game.Add(input);
         }
 
-        public int GetID()
+        private int GetID()
         {
             try
             {
@@ -235,6 +228,30 @@ namespace Sudoku
             {
                 return 10000000;
             }
+        }
+
+        private int getIndex(string input)
+        {
+            input = input.ToUpper();
+            int row = RowToInt(input[0]);
+            int column = input[1] - '0';
+
+            return row * 9 + column - 1;
+        }
+
+        private int RowToInt(char header)
+        {
+            char[] rows = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I' };
+            int value = -1;
+
+            for (int i = 0; i < rows.Length; ++i)
+            {
+                if (header == rows[i])
+                {
+                    value = i;
+                }
+            }
+            return value;
         }
     }
 }
