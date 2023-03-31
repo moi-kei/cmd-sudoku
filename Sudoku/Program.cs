@@ -6,7 +6,6 @@ internal class Program
     private static void Main(string[] args)
     {
         bool game = true;
-        SudokuBoard board = new SudokuBoard();
         Console.WriteLine("enter quit to exit");
         Console.WriteLine("enter check to check if the puzzle is complete");
         Console.WriteLine("enter a number with the form [row][column] [number] (i.e A9 3)");
@@ -15,34 +14,50 @@ internal class Program
 
         while (game)
         {
-            board.PrintSudoku();
             string input = Console.ReadLine();
-
             if (input == "quit")
             {
                 game = false;
             }
-            else if (input.Length == 4)
+            else if (input == "p")
             {
-                try
+                SudokuBoard board = new SudokuBoard();
+                board.PrintSudoku();
+
+                SudokuBoard board2 = new SudokuBoard();
+                board2.PrintSudoku();
+
+                SudokuBoard board3 = new SudokuBoard();
+                board3.PrintSudoku();
+
+                input = Console.ReadLine();
+
+                if (input.Length == 4)
                 {
-                    board.AddEntry(input);
+                    try
+                    {
+                        board.AddEntry(input);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("invalid input");
+                    }
                 }
-                catch
+                else if (input == "check")
                 {
-                    Console.WriteLine("invalid input");
-                }
-            }
-            else if (input == "check")
-            {
-                if (board.CheckSudoku() == true)
-                {
-                    Console.WriteLine("Game Completed");
-                    game = false;
+                    if (board.CheckSudoku() == true)
+                    {
+                        Console.WriteLine("Game Completed");
+                        game = false;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Game not Completed");
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("Game not Completed");
+                    Console.WriteLine("invalid input");
                 }
             }
             else

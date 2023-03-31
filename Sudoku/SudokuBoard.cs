@@ -21,12 +21,12 @@ namespace Sudoku
 
         public SudokuBoard()
         {
-            this.Board = initialBoard;
+            SudokuGenerator generator = new SudokuGenerator();  
+            this.Board = generator.GeneratePuzzle();
             GameID = 0; 
-
             StringBuilder str = new StringBuilder();
 
-            foreach(char c in initialBoard)
+            foreach(char c in Board)
             {
                 if(c == '_')
                 {
@@ -37,7 +37,6 @@ namespace Sudoku
                     str.Append('1');
                 }
             }
-
             startingNumbers = str.ToString();
         }
 
