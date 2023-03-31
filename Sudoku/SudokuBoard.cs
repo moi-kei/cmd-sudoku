@@ -11,7 +11,7 @@ namespace Sudoku
     internal class SudokuBoard
     {
         private string initialBoardDone = "53467891267219534819834256785976142342685379171392485696153728428741963534528617_";
-        private string initialBoard = "_347_6_______5_2__75______497_261_48382_47_51__6____92__3_____78__55_24______798_6";
+        private string initialBoard = "__49____7_______5__6_1_59_2____9____5_27536__69_2_8___94_______2__5____813__497__";
 
         private string startingNumbers;
         public string Board { get; set; }
@@ -93,7 +93,6 @@ namespace Sudoku
 
         public bool CheckSudoku()
         {
-
             for (int i = 0; i < 9; i++)
             {
                 var columnCheck = new List<char>();
