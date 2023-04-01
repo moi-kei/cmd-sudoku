@@ -1,4 +1,4 @@
-﻿using Sudoku;
+﻿using Sudoku.Business;
 
 internal class Program
 {
@@ -33,12 +33,12 @@ internal class Program
 
             if(difficulty != "")
             {
-                GameMenu();
                 SudokuBoard board = new SudokuBoard(difficulty);
                 Console.WriteLine(board.GameID);
 
                 while (board.IsComplete == false)
                 {
+                    GameMenu();
                     board.PrintSudoku();
                     input = Console.ReadLine();
 
@@ -99,6 +99,8 @@ internal class Program
         Console.WriteLine("enter check to check if the puzzle is complete");
         Console.WriteLine("enter a number with the form [column][row] [number] (i.e A9 3)");
         Console.WriteLine("case does not matter, sqares encased between _ _ cannot be changed");
+        Console.WriteLine("enter u to undo last move");
+        Console.WriteLine("enter r to redo last undone move");
         Console.WriteLine("enter q to exit to main menu\n");
     }
 }

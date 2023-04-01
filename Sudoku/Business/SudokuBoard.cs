@@ -1,39 +1,45 @@
-﻿using System.Text;
-using System.Web;
+﻿using Sudoku.Data;
+using System.Text;
 
-namespace Sudoku
+namespace Sudoku.Business
 {
     internal class SudokuBoard
     {
-        private readonly string startingNumbers;      
-        public string Board { get; set; }
+        private readonly string startingNumbers;
         public int GameID { get; }
-        public bool IsComplete {  get; set; }
+        public bool IsComplete { get; set; }
+        public string Board { get; set; }
         public string? UndoneMove { get; set; }
         private readonly List<string> gameHistory;
 
         public SudokuBoard(string difficulty)
         {
-            SudokuGenerator generator = new SudokuGenerator();  
+            SudokuGenerator generator = new SudokuGenerator();
             Board = generator.GeneratePuzzle(difficulty);
-            GameID = SudokuBoardHelpers.GetID(); 
+            GameID = DataLayer.GetID();
             IsComplete = false;
-            gameHistory = new List<string>();
-            gameHistory.Add(Board);
-
+            gameHistory = new List<string>{Board};
             StringBuilder str = new StringBuilder();
-            foreach (char c in Board)
+            startingNumbers = getStartingNumbers(Board);
+        }
+
+        public SudokuBoard(int id, bool isComplete, List<string> gameHistory)
+        {
+            GameID = id;
+            IsComplete = isComplete;
+            startingNumbers = getStartingNumbers(gameHistory[2]);
+            UndoneMove = null;
+
+            if(IsComplete == false)
             {
-                if(c == ' ')
-                {
-                    str.Append('0');
-                }
-                else
-                {
-                    str.Append('1');
-                }
+                this.gameHistory = gameHistory;
+                Board = gameHistory.Last();
             }
-            startingNumbers = str.ToString();
+            else
+            {
+                Board = gameHistory[2];
+                this.gameHistory = new List<string> { Board};
+            }
         }
 
         public void PrintSudoku()
@@ -81,7 +87,7 @@ namespace Sudoku
                 }
 
                 Console.WriteLine("|");
-                
+
                 if (i % 27 == 0)
                 {
                     Console.WriteLine("  +===========+===========+===========+");
@@ -90,7 +96,7 @@ namespace Sudoku
                 {
                     Console.WriteLine("  +-----------+-----------+-----------+");
                 }
-                
+
             }
         }
 
@@ -99,7 +105,7 @@ namespace Sudoku
             for (int i = 0; i < 9; i++)
             {
                 var columnCheck = new List<char>();
-                for (int j = i; j < Board.Length; j+=9)
+                for (int j = i; j < Board.Length; j += 9)
                 {
                     if (!columnCheck.Contains(Board[j]) && Board[j] != '_')
                     {
@@ -110,7 +116,7 @@ namespace Sudoku
                         return false;
                     }
                 }
-                if(columnCheck.Count != 9)
+                if (columnCheck.Count != 9)
                 {
                     return false;
                 }
@@ -167,7 +173,7 @@ namespace Sudoku
                     }
                 }
 
-                if(i%3 == 0)
+                if (i % 3 == 0)
                 {
                     x += 21;
                 }
@@ -186,7 +192,7 @@ namespace Sudoku
             int row = input[1] - '0';
             char entry = input[3];
 
-            int offset = (row * 9)  + column -9;
+            int offset = row * 9 + column - 9;
 
             if (startingNumbers[offset] == '0')
             {
@@ -221,6 +227,10 @@ namespace Sudoku
                 gameHistory.Remove(gameHistory.Last());
                 Board = gameHistory.Last();
             }
+            else
+            {
+                Console.WriteLine("Can't undo move");
+            }
         }
 
         public void Redo()
@@ -230,6 +240,26 @@ namespace Sudoku
                 gameHistory.Add(UndoneMove);
                 Board = gameHistory.Last();
             }
+            else
+            {
+                Console.WriteLine("Can't redo move");
+            }
+        }
+        private string getStartingNumbers(String startingBoard)
+        {
+            StringBuilder str = new StringBuilder();
+            foreach (char c in Board)
+            {
+                if (c == ' ')
+                {
+                    str.Append('0');
+                }
+                else
+                {
+                    str.Append('1');
+                }
+            }
+            return str.ToString();
         }
     }
 }
