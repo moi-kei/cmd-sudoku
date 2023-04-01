@@ -7,7 +7,7 @@ internal class Program
         while (true)
         {
             MainMenu();
-            string? input = Console.ReadLine();
+            string input = Console.ReadLine();
             string difficulty = "";
 
             if (input == "1")
@@ -35,6 +35,7 @@ internal class Program
             {
                 GameMenu();
                 SudokuBoard board = new SudokuBoard(difficulty);
+                Console.WriteLine(board.GameID);
 
                 while (board.IsComplete == false)
                 {
@@ -46,11 +47,10 @@ internal class Program
                         try
                         {
                             board.AddEntry(input);
-                            Console.WriteLine(board.UndoneMove);
                         }
                         catch
                         {
-                            Console.WriteLine("invalid input x");
+                            Console.WriteLine("invalid input");
                         }
                     }
                     else if (input == "check")
@@ -63,10 +63,6 @@ internal class Program
                         else
                         {
                             Console.WriteLine("Game not Completed");
-                            foreach(string s in board.GetMoves())
-                            {
-                                Console.WriteLine(s);
-                            }
                         }
                     }
                     else if(input == "u")

@@ -71,7 +71,7 @@ namespace Sudoku
                         }
                         else
                         {
-                            Console.Write(HttpUtility.HtmlDecode($"|_{Board[i - 1]}_"));
+                            Console.Write($"|_{Board[i - 1]}_");
                         }
                         if (j < 8)
                         {
@@ -199,7 +199,7 @@ namespace Sudoku
                 }
                 else
                 {
-                    Console.WriteLine("invalid input z");
+                    Console.WriteLine("invalid input");
                 }
             }
             else
