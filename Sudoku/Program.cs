@@ -46,10 +46,11 @@ internal class Program
                         try
                         {
                             board.AddEntry(input);
+                            Console.WriteLine(board.UndoneMove);
                         }
                         catch
                         {
-                            Console.WriteLine("invalid input");
+                            Console.WriteLine("invalid input x");
                         }
                     }
                     else if (input == "check")
@@ -62,7 +63,19 @@ internal class Program
                         else
                         {
                             Console.WriteLine("Game not Completed");
+                            foreach(string s in board.GetMoves())
+                            {
+                                Console.WriteLine(s);
+                            }
                         }
+                    }
+                    else if(input == "u")
+                    {
+                        board.Undo();
+                    }
+                    else if (input == "r")
+                    {
+                        board.Redo();
                     }
                     else if(input == "q")
                     {
@@ -70,7 +83,7 @@ internal class Program
                     }
                     else
                     {
-                        Console.WriteLine("invalid input");
+                        Console.WriteLine("invalid input y");
                     }
                 }
             }

@@ -9,17 +9,17 @@ namespace Sudoku
         public string Board { get; set; }
         public int GameID { get; }
         public bool IsComplete {  get; set; }
-        public string LastChanged { get; set; }
-        private List<string> game;
+        public string? UndoneMove { get; set; }
+        private readonly List<string> gameHistory;
 
         public SudokuBoard(string difficulty)
         {
             SudokuGenerator generator = new SudokuGenerator();  
             Board = generator.GeneratePuzzle(difficulty);
-            GameID = GetID(); 
+            GameID = SudokuBoardHelpers.GetID(); 
             IsComplete = false;
-            LastChanged = "";
-            game = new List<string>();
+            gameHistory = new List<string>();
+            gameHistory.Add(Board);
 
             StringBuilder str = new StringBuilder();
             foreach (char c in Board)
@@ -182,7 +182,7 @@ namespace Sudoku
         public void AddEntry(string input)
         {
             input = input.ToUpper();
-            int column = ColumnToInt(input[0]);
+            int column = SudokuBoardHelpers.ColumnToInt(input[0]);
             int row = input[1] - '0';
             char entry = input[3];
 
@@ -190,16 +190,16 @@ namespace Sudoku
 
             if (startingNumbers[offset] == '0')
             {
-                if (entry == '1' || entry == '2' || entry == '3' || entry == '4' || entry == '5' || entry == '6' || entry == '7' || entry == '8' || entry == '9')
+                if (entry == '1' || entry == '2' || entry == '3' || entry == '4' || entry == '5' || entry == '6' || entry == '7' || entry == '8' || entry == '9' || entry == ' ')
                 {
-                    AddMove(input);
                     StringBuilder newBoard = new StringBuilder(Board);
                     newBoard[offset] = entry;
                     Board = newBoard.ToString();
+                    gameHistory.Add(Board);
                 }
                 else
                 {
-                    Console.WriteLine("invalid input");
+                    Console.WriteLine("invalid input z");
                 }
             }
             else
@@ -208,53 +208,28 @@ namespace Sudoku
             }
         }
 
-        private void AddMove(String input)
+        public List<string> GetMoves()
         {
-            StringBuilder str = new StringBuilder(input);
-            str[3] = Board[getIndex(input)];
-            LastChanged = str.ToString();
-
-            game.Add(input);
+            return gameHistory;
         }
 
-        private int GetID()
+        public void Undo()
         {
-            try
+            if (gameHistory.Count > 1)
             {
-                var lastLine = File.ReadLines(@"GameHistory.csv").Last();
-                var splitLine = lastLine.Split(',');
-                int nextID = int.Parse(splitLine[0]) + 1;
-
-                return nextID;
-            }
-            catch
-            {
-                return 10000000;
+                UndoneMove = gameHistory.Last();
+                gameHistory.Remove(gameHistory.Last());
+                Board = gameHistory.Last();
             }
         }
 
-        private int getIndex(string input)
+        public void Redo()
         {
-            input = input.ToUpper();
-            int row = ColumnToInt(input[0]);
-            int column = input[1] - '0';
-
-            return row * 9 + column - 1;
-        }
-
-        private static int ColumnToInt(char header)
-        {
-            char[] rows = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I' };
-            int value = -1;
-
-            for (int i = 0; i < rows.Length; ++i)
+            if (UndoneMove != null)
             {
-                if (header == rows[i])
-                {
-                    value = i;
-                }
+                gameHistory.Add(UndoneMove);
+                Board = gameHistory.Last();
             }
-            return value;
         }
     }
 }
