@@ -1,10 +1,4 @@
 ﻿using Sudoku.Business;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.PortableExecutable;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sudoku.Data
 {
@@ -41,38 +35,37 @@ namespace Sudoku.Data
 
         public static SudokuBoard? LoadGame(string iD)
         {
-            using (StreamReader reader = new(@"GameHistory.csv"))
+            using StreamReader reader = new(@"GameHistory.csv");
+            while (!reader.EndOfStream)
             {
-                while (!reader.EndOfStream)
+                var line = reader.ReadLine();
+                var splitLine = line!.Split(',');
+                string gameID = splitLine[0];
+
+
+                if (gameID.Equals(iD))
                 {
-                    var line = reader.ReadLine();
-                    var splitLine = line!.Split(',');
-                    string gameID = splitLine[0];
+                    bool isComplete;
 
+                    Console.WriteLine(splitLine[1]);
 
-                    if (gameID.Equals(iD))
+                    if (splitLine[1] == "1")
                     {
-                        bool isComplete;
-
-                        if (splitLine[1] == "1")
-                        {
-                            isComplete = true;
-                        }
-                        else
-                        {
-                            isComplete = false;
-                        }
-
-                        List<string> lines = new();
-
-                        for(int i = 2; i < splitLine.Length; i++)
-                        {
-                            lines.Add(splitLine[i]);
-                        }
-
-                        SudokuBoard loadedGame = new(gameID, isComplete, lines);
-                        return loadedGame;
+                        isComplete = true;
                     }
+                    else
+                    {
+                        isComplete = false;
+                    }
+
+                    List<string> lines = new();
+                    for (int i = 2; i < splitLine.Length; i++)
+                    {
+                        lines.Add(splitLine[i]);
+                    }
+
+                    SudokuBoard loadedGame = new(gameID, isComplete, lines);
+                    return loadedGame;
                 }
             }
             return null;

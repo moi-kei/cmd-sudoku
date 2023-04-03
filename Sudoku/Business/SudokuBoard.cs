@@ -24,17 +24,20 @@ namespace Sudoku.Business
 
         public SudokuBoard(string id, bool isComplete, List<string> gameHistory)
         {
-            IsComplete = isComplete;
             startingNumbers = GetStartingNumbers(gameHistory[0]);
 
-            if(IsComplete == false)
+            if(isComplete == false)
             {
+                Console.WriteLine("in here");
+                IsComplete = isComplete;
                 GameID = id;
                 this.gameHistory = gameHistory;
                 Board = gameHistory.Last();
             }
-            else
+            else if(isComplete == true)
             {
+                Console.WriteLine("in there");
+                this.IsComplete = false;
                 GameID = DataLayer.GetID().ToString();
                 Board = gameHistory[0];
                 this.gameHistory = new List<string> {Board};
@@ -107,7 +110,7 @@ namespace Sudoku.Business
                 var columnCheck = new List<char>();
                 for (int j = i; j < Board.Length; j += 9)
                 {
-                    if (!columnCheck.Contains(Board[j]) && Board[j] != '_')
+                    if (!columnCheck.Contains(Board[j]) && Board[j] != ' ')
                     {
                         columnCheck.Add(Board[j]);
                     }
@@ -154,7 +157,7 @@ namespace Sudoku.Business
 
                 for (int j = 1; j < 10; j++)
                 {
-                    if (!squareCheck.Contains(Board[y]) && Board[y] != '_')
+                    if (!squareCheck.Contains(Board[y]) && Board[y] != ' ')
                     {
                         squareCheck.Add(Board[y]);
                     }
@@ -274,7 +277,6 @@ namespace Sudoku.Business
             StringBuilder str = new();
             foreach (char c in startingBoard)
             {
-                Console.WriteLine(c);
                 if (c == ' ')
                 {
                     str.Append('0');

@@ -60,7 +60,7 @@ internal class Program
                     {
                         Console.WriteLine(s);
                     }
-                    loadedGame = true;
+                    loadedGame = false;
                     SudokuBoard? board = LoadGame();
 
                     if (board != null)
@@ -192,17 +192,20 @@ internal class Program
         {
            var input = Console.ReadLine();
 
-            if (input == null)
+            if (input == "q")
             {
                 return null;
             }
-            else if (DataLayer.LoadGame(input) != null)
+
+            try
             {
-                SudokuBoard board = DataLayer.LoadGame(input);
-                Console.WriteLine(board.GameID);
+                SudokuBoard? board = DataLayer.LoadGame(input);
                 return board;
             }
-            else return null;
+            catch
+            {
+                return null;
+            }
         }
         catch
         {
