@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,31 +10,36 @@ namespace Sudoku.Data
 {
     internal class DataLayer
     {
-        public static void SaveGame(SudokuBoard sudoku)
+        public static void SaveGame(SudokuBoard sudoku, bool loadedGame)
         {
-            int csvIsComplete;
-
-            if (sudoku.IsComplete == true)
+            if (loadedGame == false)
             {
-                csvIsComplete = 1;
+                string csvOutput = SudokuToCSV(sudoku);
+
+                using StreamWriter writer = new(@"GameHistory.csv", true);
+                writer.WriteLine(csvOutput);
             }
             else
             {
-                csvIsComplete = 0;
+                string[] lines = File.ReadAllLines(@"GameHistory.csv");
+
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    if (lines[i][..1].Equals(sudoku.GameID))
+                    {
+                        lines[i] = SudokuToCSV(sudoku);
+                    }
+                }
+
+                using StreamWriter writer = new(@"GameHistory.csv", false);
+                foreach (var line in lines)
+                {
+                    writer.WriteLine(line);
+                }
             }
-
-            string csvOutput = $"{sudoku.GameID},{csvIsComplete}";
-
-            foreach(string s in sudoku.GetMoves())
-            {
-                csvOutput += "," + s;
-            }
-
-            using StreamWriter writer = new(@"GameHistory.csv", true);
-            writer.WriteLine(csvOutput);
         }
 
-        public static SudokuBoard? LoadGame(int iD)
+        public static SudokuBoard? LoadGame(string iD)
         {
             using (StreamReader reader = new(@"GameHistory.csv"))
             {
@@ -41,8 +47,10 @@ namespace Sudoku.Data
                 {
                     var line = reader.ReadLine();
                     var splitLine = line!.Split(',');
+                    string gameID = splitLine[0];
 
-                    if (int.Parse(splitLine[0]) == iD)
+
+                    if (gameID.Equals(iD))
                     {
                         bool isComplete;
 
@@ -56,15 +64,18 @@ namespace Sudoku.Data
                         }
 
                         List<string> lines = new();
+
                         for(int i = 2; i < splitLine.Length; i++)
                         {
                             lines.Add(splitLine[i]);
                         }
-                        SudokuBoard loadedGame = new SudokuBoard(int.Parse(splitLine[0]), isComplete, lines);
+
+                        SudokuBoard loadedGame = new(gameID, isComplete, lines);
                         return loadedGame;
                     }
                 }
             }
+            Console.WriteLine("returned null");
             return null;
         }
 
@@ -82,6 +93,59 @@ namespace Sudoku.Data
             {
                 return 1;
             }
+        }
+
+        public static List<string> GetIncompleteGames()
+        {
+            List<string> incompleteGames = new();
+            using StreamReader reader = new(@"GameHistory.csv");
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                var splitLine = line!.Split(',');
+                if (splitLine[1].Equals("0"))
+                {
+                    incompleteGames.Add(splitLine[0]);
+                }              
+            }
+            return incompleteGames;
+        }
+
+        public static List<string> GetCompleteGames()
+        {
+            List<string> completeGames = new();
+            using StreamReader reader = new(@"GameHistory.csv");
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                var splitLine = line!.Split(',');
+                if (splitLine[1].Equals("1"))
+                {
+                    completeGames.Add(splitLine[0]);
+                }
+            }
+            return completeGames;
+        }
+
+        private static string SudokuToCSV(SudokuBoard sudoku)
+        {
+            int isComplete;
+
+            if (sudoku.IsComplete == true)
+            {
+                isComplete = 1;
+            }
+            else
+            {
+                isComplete = 0;
+            }
+            string csvOutput = $"{sudoku.GameID},{isComplete}";
+
+            foreach (string s in sudoku.GetMoves())
+            {
+                csvOutput += "," + s;
+            }
+            return csvOutput;
         }
     }
 }

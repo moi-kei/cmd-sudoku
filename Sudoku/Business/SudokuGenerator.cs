@@ -2,13 +2,13 @@
 
 class SudokuGenerator
 {
-    private int[,] board = new int[9, 9];
-    private Random rand = new Random();
+    private readonly int[,] board = new int[9, 9];
+    private readonly Random rand = new();
 
     public string GeneratePuzzle(string difficulty)
     {
         FillBoard(0, 0);
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
 
         for (int i = 0; i < 9; i++)
         {
@@ -17,7 +17,7 @@ class SudokuGenerator
                 sb.Append(board[i, j]);
             }
         }
-        string completePuzzle = ReplaceChars(sb.ToString(), gameDifficulty(difficulty)[0], gameDifficulty(difficulty)[1]);
+        string completePuzzle = ReplaceChars(sb.ToString(), GameDifficulty(difficulty)[0], GameDifficulty(difficulty)[1]);
         return completePuzzle;
     }
 
@@ -87,9 +87,7 @@ class SudokuGenerator
         for (int i = values.Length - 1; i > 0; i--)
         {
             int j = rand.Next(i + 1);
-            int temp = values[i];
-            values[i] = values[j];
-            values[j] = temp;
+            (values[j], values[i]) = (values[i], values[j]);
         }
 
         return values;
@@ -104,10 +102,10 @@ class SudokuGenerator
         }
 
         //create a StringBuilder object from the input string
-        StringBuilder sb = new StringBuilder(inputString);
+        StringBuilder sb = new(inputString);
 
         //create a new instance of Random class to generate random indices
-        Random rnd = new Random();
+        Random rnd = new();
 
         //generate a random number between min and max range (inclusive)
         int numOfCharsToReplace = rnd.Next(minNumOfCharsToReplace, maxNumOfCharsToReplace + 1); 
@@ -130,7 +128,7 @@ class SudokuGenerator
         return sb.ToString(); 
     }
 
-    private static int[] gameDifficulty(string difficulty)
+    private static int[] GameDifficulty(string difficulty)
     {
         int[] diff = new int[2];
 

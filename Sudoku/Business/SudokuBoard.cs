@@ -6,7 +6,7 @@ namespace Sudoku.Business
     internal class SudokuBoard
     {
         private readonly string startingNumbers;
-        public int GameID { get; }
+        public string GameID { get; }
         public bool IsComplete { get; set; }
         public string Board { get; set; }
         public string? UndoneMove { get; set; }
@@ -14,36 +14,36 @@ namespace Sudoku.Business
 
         public SudokuBoard(string difficulty)
         {
-            SudokuGenerator generator = new SudokuGenerator();
+            SudokuGenerator generator = new();
             Board = generator.GeneratePuzzle(difficulty);
-            GameID = DataLayer.GetID();
+            GameID = DataLayer.GetID().ToString();
             IsComplete = false;
             gameHistory = new List<string>{Board};
-            StringBuilder str = new StringBuilder();
-            startingNumbers = getStartingNumbers(Board);
+            startingNumbers = GetStartingNumbers(Board);
         }
 
-        public SudokuBoard(int id, bool isComplete, List<string> gameHistory)
+        public SudokuBoard(string id, bool isComplete, List<string> gameHistory)
         {
-            GameID = id;
             IsComplete = isComplete;
-            startingNumbers = getStartingNumbers(gameHistory[2]);
-            UndoneMove = null;
+            startingNumbers = GetStartingNumbers(gameHistory[0]);
 
             if(IsComplete == false)
             {
+                GameID = id;
                 this.gameHistory = gameHistory;
                 Board = gameHistory.Last();
             }
             else
             {
-                Board = gameHistory[2];
-                this.gameHistory = new List<string> { Board};
+                GameID = DataLayer.GetID().ToString();
+                Board = gameHistory[0];
+                this.gameHistory = new List<string> {Board};
             }
         }
 
         public void PrintSudoku()
         {
+            Console.WriteLine($" Game ID: {GameID}");
             Console.WriteLine("    A   B   C   D   E   F   G   H   I");
             Console.WriteLine("  +===========+===========+===========+");
             int rowID = 1;
@@ -188,7 +188,7 @@ namespace Sudoku.Business
         public void AddEntry(string input)
         {
             input = input.ToUpper();
-            int column = SudokuBoardHelpers.ColumnToInt(input[0]);
+            int column = ColumnToInt(input[0]);
             int row = input[1] - '0';
             char entry = input[3];
 
@@ -198,7 +198,7 @@ namespace Sudoku.Business
             {
                 if (entry == '1' || entry == '2' || entry == '3' || entry == '4' || entry == '5' || entry == '6' || entry == '7' || entry == '8' || entry == '9' || entry == ' ')
                 {
-                    StringBuilder newBoard = new StringBuilder(Board);
+                    StringBuilder newBoard = new(Board);
                     newBoard[offset] = entry;
                     Board = newBoard.ToString();
                     gameHistory.Add(Board);
@@ -245,11 +245,36 @@ namespace Sudoku.Business
                 Console.WriteLine("Can't redo move");
             }
         }
-        private string getStartingNumbers(String startingBoard)
+
+        public void Restart()
         {
-            StringBuilder str = new StringBuilder();
-            foreach (char c in Board)
+            Console.WriteLine("are you sure you want to restart puzzle form the beinning? \nthis can be undone if you change your mind. \n1 for yes, 2 for no");
+            while (true)
             {
+                var input = Console.ReadLine();
+                if (input == "1")
+                {
+                    gameHistory.Add(Board);
+                    Board = gameHistory[0];
+                    break;
+                }
+                else if(input =="2")
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("invalid input");
+                }
+            }
+        }
+
+        private static string GetStartingNumbers(String startingBoard)
+        {
+            StringBuilder str = new();
+            foreach (char c in startingBoard)
+            {
+                Console.WriteLine(c);
                 if (c == ' ')
                 {
                     str.Append('0');
@@ -260,6 +285,21 @@ namespace Sudoku.Business
                 }
             }
             return str.ToString();
+        }
+
+        public static int ColumnToInt(char header)
+        {
+            char[] rows = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I' };
+            int value = -1;
+
+            for (int i = 0; i < rows.Length; ++i)
+            {
+                if (header == rows[i])
+                {
+                    value = i;
+                }
+            }
+            return value;
         }
     }
 }
