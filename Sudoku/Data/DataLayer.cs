@@ -75,7 +75,6 @@ namespace Sudoku.Data
                     }
                 }
             }
-            Console.WriteLine("returned null");
             return null;
         }
 
