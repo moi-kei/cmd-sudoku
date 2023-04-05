@@ -9,8 +9,8 @@ namespace Sudoku.Business
         public string GameID { get; }
         public bool IsComplete { get; set; }
         public string Board { get; set; }
-        public string? UndoneMove { get; set; }
         private readonly List<string> gameHistory;
+        private readonly List<string> undoneMoves;
 
         public SudokuBoard(string difficulty)
         {
@@ -19,14 +19,16 @@ namespace Sudoku.Business
             GameID = DataLayer.GetID().ToString();
             IsComplete = false;
             gameHistory = new List<string>{Board};
+            undoneMoves = new List<string>();
             startingNumbers = GetStartingNumbers(Board);
         }
 
         public SudokuBoard(string id, bool isComplete, List<string> gameHistory)
         {
             startingNumbers = GetStartingNumbers(gameHistory[0]);
+            undoneMoves = new List<string>();
 
-            if(isComplete == false)
+            if (isComplete == false)
             {
                 Console.WriteLine("in here");
                 IsComplete = isComplete;
@@ -34,7 +36,7 @@ namespace Sudoku.Business
                 this.gameHistory = gameHistory;
                 Board = gameHistory.Last();
             }
-            else if(isComplete == true)
+            else
             {
                 Console.WriteLine("in there");
                 this.IsComplete = false;
@@ -226,7 +228,7 @@ namespace Sudoku.Business
         {
             if (gameHistory.Count > 1)
             {
-                UndoneMove = gameHistory.Last();
+                undoneMoves.Add(gameHistory.Last());
                 gameHistory.Remove(gameHistory.Last());
                 Board = gameHistory.Last();
             }
@@ -238,9 +240,10 @@ namespace Sudoku.Business
 
         public void Redo()
         {
-            if (UndoneMove != null)
+            if (undoneMoves.Count > 0)
             {
-                gameHistory.Add(UndoneMove);
+                gameHistory.Add(undoneMoves.Last());
+                undoneMoves.Remove(undoneMoves.Last());
                 Board = gameHistory.Last();
             }
             else
