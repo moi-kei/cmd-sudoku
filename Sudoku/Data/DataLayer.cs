@@ -33,7 +33,7 @@ namespace Sudoku.Data
             }
         }
 
-        public static SudokuBoard? LoadGame(string iD)
+        public static SudokuBoard? LoadGame(string iD, bool replay)
         {
             using StreamReader reader = new(@"GameHistory.csv");
             while (!reader.EndOfStream)
@@ -64,7 +64,7 @@ namespace Sudoku.Data
                         lines.Add(splitLine[i]);
                     }
 
-                    SudokuBoard loadedGame = new(gameID, isComplete, lines);
+                    SudokuBoard loadedGame = new(gameID, isComplete, lines, replay);
                     return loadedGame;
                 }
             }

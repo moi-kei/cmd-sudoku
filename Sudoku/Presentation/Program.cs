@@ -12,7 +12,6 @@ internal class Program
 
         while (true)
         {
-            bool loadedGame = false;
             SudokuGame.MainMenu();
             var input = Console.ReadLine();
             string difficulty = "";
@@ -38,12 +37,11 @@ internal class Program
                     {
                         Console.WriteLine(s);
                     }
-                    loadedGame = true;
-                    SudokuBoard? board = SudokuGame.LoadGame();
+                    SudokuBoard? board = SudokuGame.LoadGame(false);
 
                     if (board != null )
                     {
-                        SudokuGame.PlayGame(board, loadedGame);
+                        SudokuGame.PlayGame(board, true);
                     }
                 }
                 catch
@@ -60,12 +58,12 @@ internal class Program
                     {
                         Console.WriteLine(s);
                     }
-                    loadedGame = false;
-                    SudokuBoard? board = SudokuGame.LoadGame();
+
+                    SudokuBoard? board = SudokuGame.LoadGame(false);
 
                     if (board != null)
                     {
-                        SudokuGame.PlayGame(board, loadedGame);
+                        SudokuGame.PlayGame(board, false);
                     }
                 }
                 catch
@@ -75,7 +73,25 @@ internal class Program
             }
             else if (input == "9")
             {
+                try
+                {
+                    Console.WriteLine("\nGame IDs of finished games:");
+                    foreach (string s in DataLayer.GetCompleteGames())
+                    {
+                        Console.WriteLine(s);
+                    }
 
+                    SudokuBoard? board = SudokuGame.LoadGame(true);
+
+                    if (board != null)
+                    {
+                        SudokuGame.ReplayGame(board);
+                    }
+                }
+                catch
+                {
+                    Console.WriteLine("\nCouldn't load game");
+                }
             }
             else if (input == "q")
             {
@@ -89,13 +105,8 @@ internal class Program
             if(difficulty != "")
             {
                 SudokuBoard board = new(difficulty);
-                SudokuGame.PlayGame(board, loadedGame);
+                SudokuGame.PlayGame(board, false);
             }
         }
-    }
-
-    private static void ReplayGame()
-    {
-
     }
 }

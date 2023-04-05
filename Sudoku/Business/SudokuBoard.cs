@@ -23,7 +23,7 @@ namespace Sudoku.Business
             startingNumbers = GetStartingNumbers(Board);
         }
 
-        public SudokuBoard(string id, bool isComplete, List<string> gameHistory)
+        public SudokuBoard(string id, bool isComplete, List<string> gameHistory, bool replay)
         {
             startingNumbers = GetStartingNumbers(gameHistory[0]);
             undoneMoves = new List<string>();
@@ -42,7 +42,14 @@ namespace Sudoku.Business
                 this.IsComplete = false;
                 GameID = DataLayer.GetID().ToString();
                 Board = gameHistory[0];
-                this.gameHistory = new List<string> {Board};
+                if (replay == true)
+                {
+                    this.gameHistory = gameHistory;
+                }
+                else
+                {
+                    this.gameHistory = new List<string> { Board };
+                }
             }
         }
 
@@ -195,7 +202,7 @@ namespace Sudoku.Business
             input = input.ToUpper();
             int column = ColumnToInt(input[0]);
             int row = input[1] - '0';
-            char entry = input[3];
+            char entry = input[2];
 
             int offset = row * 9 + column - 9;
 
