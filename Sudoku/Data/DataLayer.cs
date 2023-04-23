@@ -2,8 +2,19 @@
 
 namespace Sudoku.Data
 {
+    /**
+    * Static class containing functions for interacting with the csv file.
+    * Deals with saving and loading games.
+    * @author Michael Mackenzie
+    */
     internal class DataLayer
     {
+
+        /// <summary>
+        /// Saves the game of sudoku to the csv file
+        /// </summary>
+        /// <param name="sudoku"></param>
+        /// <param name="loadedGame"></param>
         public static void SaveGame(SudokuBoard sudoku, bool loadedGame)
         {
             if (loadedGame == false)
@@ -49,7 +60,7 @@ namespace Sudoku.Data
 
                     Console.WriteLine(splitLine[1]);
 
-                    if (splitLine[1] == "1")
+                    if (splitLine[1] == "3" && splitLine[2] == "1")
                     {
                         isComplete = true;
                     }
@@ -59,7 +70,7 @@ namespace Sudoku.Data
                     }
 
                     List<string> lines = new();
-                    for (int i = 2; i < splitLine.Length; i++)
+                    for (int i = 3; i < splitLine.Length; i++)
                     {
                         lines.Add(splitLine[i]);
                     }
@@ -95,7 +106,7 @@ namespace Sudoku.Data
             {
                 var line = reader.ReadLine();
                 var splitLine = line!.Split(',');
-                if (splitLine[1].Equals("0"))
+                if (splitLine[1] == "3" && splitLine[2].Equals("0"))
                 {
                     incompleteGames.Add(splitLine[0]);
                 }              
@@ -111,7 +122,7 @@ namespace Sudoku.Data
             {
                 var line = reader.ReadLine();
                 var splitLine = line!.Split(',');
-                if (splitLine[1].Equals("1"))
+                if (splitLine[1] == "3" && splitLine[2] == "1")
                 {
                     completeGames.Add(splitLine[0]);
                 }
@@ -131,7 +142,7 @@ namespace Sudoku.Data
             {
                 isComplete = 0;
             }
-            string csvOutput = $"{sudoku.GameID},{isComplete}";
+            string csvOutput = $"{sudoku.GameID},3,{isComplete}";
 
             foreach (string s in sudoku.GetMoves())
             {

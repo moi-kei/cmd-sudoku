@@ -5,40 +5,87 @@ namespace Sudoku.Business
 {
     internal class SudokuBoard
     {
+        /// <summary>
+        /// a string of 0s and 1s representing the starting numbers 
+        /// </summary>
         private readonly string startingNumbers;
+
+        /// <summary>
+        /// Gets the game identifier.
+        /// </summary>
+        /// <value>
+        /// The game identifier.
+        /// </value>
         public string GameID { get; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is complete.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is complete; otherwise, <c>false</c>.
+        /// </value>
         public bool IsComplete { get; set; }
+
+        /// <summary>
+        /// Gets or sets the board.
+        /// </summary>
+        /// <value>
+        /// The board.
+        /// </value>
         public string Board { get; set; }
+
+        /// <summary>
+        /// The game history
+        /// </summary>
         private readonly List<string> gameHistory;
+
+        /// <summary>
+        /// The undone moves
+        /// </summary>
         private readonly List<string> undoneMoves;
 
+        /// <summary>Initializes a new instance of the <see cref="SudokuBoard" /> class.</summary>
+        /// <param name="difficulty">The difficulty.</param>
         public SudokuBoard(string difficulty)
         {
+            //generate a new sudoku puzzle from scratch
             SudokuGenerator generator = new();
             Board = generator.GeneratePuzzle(difficulty);
+            //get new ID
             GameID = DataLayer.GetID().ToString();
+            //set isComplete to false and instatiate the lists
             IsComplete = false;
             gameHistory = new List<string>{Board};
             undoneMoves = new List<string>();
+            //record the starting numbers
             startingNumbers = GetStartingNumbers(Board);
         }
 
+        /// <summary>Initializes a new instance of the <see cref="SudokuBoard" /> class.
+        /// For loading games from csv file.</summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="isComplete">if set to <c>true</c> [is complete].</param>
+        /// <param name="gameHistory">The game history.</param>
+        /// <param name="replay">if set to <c>true</c> [replay].</param>
         public SudokuBoard(string id, bool isComplete, List<string> gameHistory, bool replay)
         {
+            // record starting numbers from the first entry in the gameHistory
             startingNumbers = GetStartingNumbers(gameHistory[0]);
             undoneMoves = new List<string>();
 
+            // if the game is not complete
             if (isComplete == false)
             {
-                Console.WriteLine("in here");
+                // continue on from last point
                 IsComplete = isComplete;
                 GameID = id;
                 this.gameHistory = gameHistory;
                 Board = gameHistory.Last();
             }
+            // if the game is complete
             else
             {
-                Console.WriteLine("in there");
+                // reset the game with thge original starting numbers
                 this.IsComplete = false;
                 GameID = DataLayer.GetID().ToString();
                 Board = gameHistory[0];
@@ -53,8 +100,10 @@ namespace Sudoku.Business
             }
         }
 
+        /// <summary>Prints the sudoku.</summary>
         public void PrintSudoku()
         {
+            // print headers
             Console.WriteLine($" Game ID: {GameID}");
             Console.WriteLine("    A   B   C   D   E   F   G   H   I");
             Console.WriteLine("  +===========+===========+===========+");
@@ -64,8 +113,11 @@ namespace Sudoku.Business
             {
                 for (int j = 0; j < 9; ++j)
                 {
+                    // print starting number differently from others so the user can differentiate
+                    // numbers that cannot be changed (starting numbers) will be between underscores e.g. _3_
                     if (startingNumbers[i - 1] == '0')
                     {
+                        // if it's the start of a row print the row ID aswell
                         if (j == 0)
                         {
                             Console.Write($"{rowID} | {Board[i - 1]} ");
@@ -97,9 +149,9 @@ namespace Sudoku.Business
                         }
                     }
                 }
-
                 Console.WriteLine("|");
 
+                //print = insted of - every 3rd row so the user can easily see the 3x3 square grids
                 if (i % 27 == 0)
                 {
                     Console.WriteLine("  +===========+===========+===========+");
@@ -108,12 +160,14 @@ namespace Sudoku.Business
                 {
                     Console.WriteLine("  +-----------+-----------+-----------+");
                 }
-
             }
         }
 
+        /// <summary>Checks the sudoku.</summary>
+        /// <returns>false if puzzle is incomplete true if complete</returns>
         public bool CheckSudoku()
         {
+            // check every row contains 9 unique numbers
             for (int i = 0; i < 9; i++)
             {
                 var columnCheck = new List<char>();
@@ -134,6 +188,7 @@ namespace Sudoku.Business
                 }
             }
 
+            //check every column contains 9 unique numbers
             for (int i = 0; i < Board.Length; i++)
             {
                 var rowCheck = new List<char>();
@@ -158,6 +213,7 @@ namespace Sudoku.Business
                 }
             }
 
+            //check each 3x3 square contains 9 unique numbers
             int x = 0;
             for (int i = 1; i < 10; i++)
             {
@@ -197,6 +253,8 @@ namespace Sudoku.Business
             return true;
         }
 
+        /// <summary>Adds the entry into the sudoku.</summary>
+        /// <param name="input">The input.</param>
         public void AddEntry(string input)
         {
             input = input.ToUpper();
@@ -204,14 +262,14 @@ namespace Sudoku.Business
             int row = input[1] - '0';
             char entry = input[2];
 
-            int offset = row * 9 + column - 9;
+            int index = row * 9 + column - 9;
 
-            if (startingNumbers[offset] == '0')
+            if (startingNumbers[index] == '0')
             {
                 if (entry == '1' || entry == '2' || entry == '3' || entry == '4' || entry == '5' || entry == '6' || entry == '7' || entry == '8' || entry == '9' || entry == ' ')
                 {
                     StringBuilder newBoard = new(Board);
-                    newBoard[offset] = entry;
+                    newBoard[index] = entry;
                     Board = newBoard.ToString();
                     gameHistory.Add(Board);
                 }
@@ -226,11 +284,14 @@ namespace Sudoku.Business
             }
         }
 
+        /// <summary>Gets the moves.</summary>
+        /// <returns>A list of stages of the game</returns>
         public List<string> GetMoves()
         {
             return gameHistory;
         }
 
+        /// <summary>Undoes the last move.</summary>
         public void Undo()
         {
             if (gameHistory.Count > 1)
@@ -245,6 +306,7 @@ namespace Sudoku.Business
             }
         }
 
+        /// <summary>Redoes last undone move.</summary>
         public void Redo()
         {
             if (undoneMoves.Count > 0)
@@ -259,6 +321,7 @@ namespace Sudoku.Business
             }
         }
 
+        /// <summary>Restarts this Sudoku game.</summary>
         public void Restart()
         {
             Console.WriteLine("are you sure you want to restart puzzle form the beinning? \nthis can be undone if you change your mind. \n1 for yes, 2 for no");
@@ -282,6 +345,9 @@ namespace Sudoku.Business
             }
         }
 
+        /// <summary>records the numbers that were on the board at the beginning so the game knows they can't be changed</summary>
+        /// <param name="startingBoard">The starting board.</param>
+        /// <returns>returns a string of 0's if the square is blank or 1's if the square is filled</returns>
         private static string GetStartingNumbers(String startingBoard)
         {
             StringBuilder str = new();
@@ -299,6 +365,9 @@ namespace Sudoku.Business
             return str.ToString();
         }
 
+        /// <summary>Changes column header to an int.</summary>
+        /// <param name="header">The header.</param>
+        /// <returns>an integer i.e. A = 0</returns>
         public static int ColumnToInt(char header)
         {
             char[] rows = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I' };
