@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Sudoku\AlternateGames\4x4\" />
     <Folder Include="Sudoku\AlternateGames\5x5\" />
   </ItemGroup>
 

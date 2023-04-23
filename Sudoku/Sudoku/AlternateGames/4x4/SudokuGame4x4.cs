@@ -1,9 +1,8 @@
 ﻿using Sudoku.Data;
-using System.Diagnostics;
 
 namespace Sudoku.Business
 {
-    internal static class SudokuGame
+    internal static class SudokuGame4x4
     {
         /// <summary>Saves the game.</summary>
         /// <param name="sudoku">The sudoku.</param>
@@ -28,7 +27,7 @@ namespace Sudoku.Business
                     if (input == "1")
                     {
                         // Save the game too the csv using the DataLayer class
-                        DataLayer.SaveGame(sudoku, loadedGame, "3");
+                        DataLayer.SaveGame(sudoku, loadedGame, "4");
                         break;
                     }
                     // Check if the user does not want to save the game
@@ -142,112 +141,10 @@ namespace Sudoku.Business
                 {
                     sudoku.Restart();
                 }
-                // Quit the game and ask to save the current state of the sudoku board
+                // Quit the game and save the current state of the sudoku board
                 else if (input == "q")
                 {
                     SudokuGame.SaveGame(sudoku, loadedGame);
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("invalid input");
-                }
-            }
-        }
-
-        /// <summary>Plays the game.</summary>
-        /// <param name="sudoku">The sudoku.</param>
-        /// <param name="loadedGame">if set to <c>true</c> [loaded game].</param>
-        /// 
-        public static void PlayTimedGame(SudokuBoard sudoku, bool loadedGame)
-        {
-            int timeLimit;
-
-            while (true) 
-            {
-                Console.WriteLine("timed games cannot be saved");
-                Console.WriteLine("enter a value for the timer in seconds e.g. 300 for 5 minute timer");
-                var input = Console.ReadLine();
-
-                try
-                {
-                    if (input != null) 
-                    { 
-                        timeLimit = Int32.Parse(input);
-                        break;
-                    }
-                }
-                catch
-                {
-                    Console.WriteLine("timer invalid");
-                }
-            }
- 
-            Stopwatch stopWatch = new();
-            stopWatch.Start();
-            while (sudoku.IsComplete == false)
-            {
-                if (timeLimit < stopWatch.Elapsed.TotalSeconds)
-                {
-                    Console.WriteLine("Time's up!");
-                    break;
-                }
-
-                // Display game menu and print the sudoku board
-                GameMenu();
-                Console.WriteLine($"Time: {stopWatch.Elapsed.TotalSeconds}");
-                sudoku.PrintSudoku();
-                // Take user input and handle different input cases
-                var input = Console.ReadLine();
-
-                //check if input is null
-                if (input == null)
-                {
-                    Console.WriteLine("invalid input");
-                }
-                // Try to add user input to the sudoku board as a new entry
-                else if (input.Length > 1)
-                {
-                    try
-                    {
-                        sudoku.AddEntry(input);
-                    }
-                    catch
-                    {
-                        Console.WriteLine("invalid input");
-                    }
-                }
-                // Check if the sudoku board is completed correctly
-                else if (input == "c")
-                {
-                    if (sudoku.CheckSudoku() == true)
-                    {
-                        Console.WriteLine("\nGame Completed");
-                        sudoku.IsComplete = true;
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nGame not Completed");
-                    }
-                }
-                // Undo last action on the sudoku board
-                else if (input == "u")
-                {
-                    sudoku.Undo();
-                }
-                // Redo last undone action on the sudoku board
-                else if (input == "i")
-                {
-                    sudoku.Redo();
-                }
-                // Restart the sudoku board
-                else if (input == "r")
-                {
-                    sudoku.Restart();
-                }
-                // Quit the game and ask to save the current state of the sudoku board
-                else if (input == "q")
-                {
                     break;
                 }
                 else

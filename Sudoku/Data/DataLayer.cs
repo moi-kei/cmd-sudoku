@@ -13,11 +13,11 @@ namespace Sudoku.Data
         /// <summary>Saves the game of sudoku to the csv file</summary>
         /// <param name="sudoku">The board that is being saved</param>
         /// <param name="loadedGame">boolean indicating wether the game had been loaded or is a new game</param>
-        public static void SaveGame(SudokuBoard sudoku, bool loadedGame)
+        public static void SaveGame(SudokuBoard sudoku, bool loadedGame, string gameType)
         {
             if (loadedGame == false)
             {
-                string csvOutput = SudokuToCSV(sudoku);
+                string csvOutput = SudokuToCSV(sudoku, gameType);
 
                 using StreamWriter writer = new(@"GameHistory.csv", true);
                 writer.WriteLine(csvOutput);
@@ -30,7 +30,7 @@ namespace Sudoku.Data
                 {
                     if (lines[i][..1].Equals(sudoku.GameID))
                     {
-                        lines[i] = SudokuToCSV(sudoku);
+                        lines[i] = SudokuToCSV(sudoku, gameType);
                     }
                 }
 
@@ -141,7 +141,7 @@ namespace Sudoku.Data
         /// <summary>Sudokus to CSV.</summary>
         /// <param name="sudoku">The SudokuBoard.</param>
         /// <returns>a string representing the game in a form compatible with csv</returns>
-        private static string SudokuToCSV(SudokuBoard sudoku)
+        private static string SudokuToCSV(SudokuBoard sudoku, string gameType)
         {
             int isComplete;
 
@@ -153,7 +153,7 @@ namespace Sudoku.Data
             {
                 isComplete = 0;
             }
-            string csvOutput = $"{sudoku.GameID},3,{isComplete}";
+            string csvOutput = $"{sudoku.GameID},{gameType},{isComplete}";
 
             foreach (string s in sudoku.GetMoves())
             {

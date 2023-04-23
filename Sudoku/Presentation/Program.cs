@@ -104,8 +104,35 @@ internal class Program
 
             if(difficulty != "")
             {
-                SudokuBoard board = new(difficulty);
-                SudokuGame.PlayGame(board, false);
+                bool timer = false;
+
+                while (true)
+                {
+                    Console.WriteLine("Do you want to add a time limit to your game? 1 for yes, 2 for no");
+                    input = Console.ReadLine();
+
+                    if (input == "1")
+                    {
+                        timer = true;
+                        break;
+                    }
+                    else if (input == "2")
+                    {
+                        timer = false;
+                        break;
+                    }
+                }
+
+                if (timer == true)
+                {
+                    SudokuBoard board = new(difficulty);
+                    SudokuGame.PlayTimedGame(board, false);
+                }
+                else if (timer == false)
+                {
+                    SudokuBoard board = new(difficulty);
+                    SudokuGame.PlayGame(board, false);
+                }
             }
         }
     }
