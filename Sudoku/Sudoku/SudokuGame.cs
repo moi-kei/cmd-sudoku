@@ -159,10 +159,10 @@ namespace Sudoku.Business
         /// <param name="sudoku">The sudoku.</param>
         /// <param name="loadedGame">if set to <c>true</c> [loaded game].</param>
         /// 
-        public static void PlayTimedGame(SudokuBoard sudoku, bool loadedGame)
+        public static void PlayTimedGame(SudokuBoard sudoku)
         {
+            // get user to input a time limit
             int timeLimit;
-
             while (true) 
             {
                 Console.WriteLine("timed games cannot be saved");
@@ -183,8 +183,11 @@ namespace Sudoku.Business
                 }
             }
  
+            // start stopwatch 
             Stopwatch stopWatch = new();
             stopWatch.Start();
+
+            //play the game
             while (sudoku.IsComplete == false)
             {
                 if (timeLimit < stopWatch.Elapsed.TotalSeconds)

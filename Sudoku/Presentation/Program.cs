@@ -126,7 +126,7 @@ internal class Program
                 if (timer == true)
                 {
                     SudokuBoard board = new(difficulty);
-                    SudokuGame.PlayTimedGame(board, false);
+                    SudokuGame.PlayTimedGame(board);
                 }
                 else if (timer == false)
                 {
