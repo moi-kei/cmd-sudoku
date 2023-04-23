@@ -157,7 +157,6 @@ namespace Sudoku.Business
 
         /// <summary>Plays the game.</summary>
         /// <param name="sudoku">The sudoku.</param>
-        /// <param name="loadedGame">if set to <c>true</c> [loaded game].</param>
         /// 
         public static void PlayTimedGame(SudokuBoard sudoku)
         {
