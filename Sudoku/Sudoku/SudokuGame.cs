@@ -61,8 +61,12 @@ namespace Sudoku.Business
                 // Attempt to load the game with the given ID
                 try
                 {
-                    SudokuBoard? board = DataLayer.LoadGame(input, replay);
-                    return board;
+                    if (input != null)
+                    {
+                        SudokuBoard? board = DataLayer.LoadGame(input, replay);
+                        return board;
+                    }
+                    else return null;
                 }
                 // If there was an error while loading the game, return null
                 catch
