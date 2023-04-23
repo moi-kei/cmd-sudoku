@@ -163,11 +163,13 @@ namespace Sudoku.Business
 
                 var input = Console.ReadLine();
 
+                // Check if user wants to quit replay
                 if ( input == "q")
                 {
                     break;
                 }
-                else if(input == "b")
+                // Check if user wants to go back one move
+                else if (input == "b")
                 {
                     i -= 2;
                 }

@@ -257,17 +257,21 @@ namespace Sudoku.Business
         /// <param name="input">The input.</param>
         public void AddEntry(string input)
         {
+            // convert the input string into numbers
             input = input.ToUpper();
             int column = ColumnToInt(input[0]);
             int row = input[1] - '0';
             char entry = input[2];
-
+            // get the index of the number entered
             int index = row * 9 + column - 9;
 
+            // check the number is not a starting number
             if (startingNumbers[index] == '0')
             {
+                //check the entered number is a valid input
                 if (entry == '1' || entry == '2' || entry == '3' || entry == '4' || entry == '5' || entry == '6' || entry == '7' || entry == '8' || entry == '9' || entry == ' ')
                 {
+                    //input the number entered into the board
                     StringBuilder newBoard = new(Board);
                     newBoard[index] = entry;
                     Board = newBoard.ToString();
@@ -292,10 +296,12 @@ namespace Sudoku.Business
         }
 
         /// <summary>Undoes the last move.</summary>
-        public void Undo()
-        {
+        public void Undo() 
+        { 
+            // Only undo move id a move has been made
             if (gameHistory.Count > 1)
             {
+                //undo move and add the move to undoneMoves list
                 undoneMoves.Add(gameHistory.Last());
                 gameHistory.Remove(gameHistory.Last());
                 Board = gameHistory.Last();
@@ -309,8 +315,10 @@ namespace Sudoku.Business
         /// <summary>Redoes last undone move.</summary>
         public void Redo()
         {
+            // only redo if undo has been used
             if (undoneMoves.Count > 0)
             {
+                // add undone move back to gameHistory and remove from undoneMoves
                 gameHistory.Add(undoneMoves.Last());
                 undoneMoves.Remove(undoneMoves.Last());
                 Board = gameHistory.Last();
@@ -321,13 +329,17 @@ namespace Sudoku.Business
             }
         }
 
-        /// <summary>Restarts this Sudoku game.</summary>
+        /// <summary>
+        /// Restarts this Sudoku game.
+        /// Doesn't wipe progress in the game, instead adds the starting state of the board as a new move so that the restart can be undone by the user
+        /// </summary>
         public void Restart()
         {
             Console.WriteLine("are you sure you want to restart puzzle form the beinning? \nthis can be undone if you change your mind. \n1 for yes, 2 for no");
             while (true)
             {
                 var input = Console.ReadLine();
+                //id input is 1 return game to starting state
                 if (input == "1")
                 {
                     gameHistory.Add(Board);
