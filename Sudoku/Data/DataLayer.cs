@@ -1,4 +1,5 @@
 ﻿using Sudoku.Business;
+using System.Reflection.PortableExecutable;
 
 namespace Sudoku.Data
 {
@@ -64,8 +65,6 @@ namespace Sudoku.Data
                 {
                     bool isComplete;
 
-                    Console.WriteLine(splitLine[1]);
-
                     if (splitLine[1] == "1")
                     {
                         isComplete = true;
@@ -109,32 +108,35 @@ namespace Sudoku.Data
         }
 
         /// <summary>
-        /// Getsthe incomplete games.
-        /// </summary>
+        /// Getsthe incomplete games. 
         /// <returns>a List of strings showing incomplete games</returns>
-        public static List<string> GetIncompleteGames()
+        public static List<SudokuBoard> GetIncompleteGames()
         {
-            List<string> incompleteGames = new();
+            List<SudokuBoard> games = new();
             using StreamReader reader = new(@"GameHistory.csv");
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
                 var splitLine = line!.Split(',');
-                if (splitLine[1].Equals("0"))
+                if (splitLine[1] == "0")
                 {
-                    incompleteGames.Add(splitLine[0]);
+                    SudokuBoard? sudoku = LoadGame(splitLine[0], false);
+                    if (sudoku != null)
+                    {
+                        games.Add(sudoku);
+                    }
                 }              
             }
-            return incompleteGames;
+            return games;
         }
 
         /// <summary>
         /// Gets the complete games.
         /// </summary>
-        /// <returns>a list of string showing all competed games</returns>
+        /// <returns></returns>
         public static List<string> GetCompleteGames()
         {
-            List<string> completeGames = new();
+            List<string> games = new();
             using StreamReader reader = new(@"GameHistory.csv");
             while (!reader.EndOfStream)
             {
@@ -142,10 +144,14 @@ namespace Sudoku.Data
                 var splitLine = line!.Split(',');
                 if (splitLine[1] == "1")
                 {
-                    completeGames.Add(splitLine[0]);
+                    string sudoku = $"GameID: {splitLine[0]} Completion time: {splitLine[2]}";
+                    if (sudoku != null)
+                    {
+                        games.Add(sudoku);
+                    }
                 }
             }
-            return completeGames;
+            return games;
         }
 
         /// <summary>

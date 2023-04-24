@@ -140,7 +140,7 @@ namespace Sudoku.Business
 
                 // Display game menu and print the sudoku board
                 GameMenu();
-                Console.WriteLine($"Time: {Math.Round(stopWatch.Elapsed.TotalSeconds/60 + sudoku.Time, 2)} minutes");
+                Console.WriteLine($"Game ID: {sudoku.GameID} Time: {Math.Round(stopWatch.Elapsed.TotalSeconds/60 + sudoku.Time, 2)} minutes");
                 sudoku.PrintSudoku();
                 // Take user input and handle different input cases
                 var input = Console.ReadLine();

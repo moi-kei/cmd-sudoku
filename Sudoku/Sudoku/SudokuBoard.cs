@@ -127,7 +127,6 @@ namespace Sudoku.Business
         public void PrintSudoku()
         {
             // print headers
-            Console.WriteLine($" Game ID: {GameID}");
             Console.WriteLine("    A   B   C   D   E   F   G   H   I");
             Console.WriteLine("  +===========+===========+===========+");
             int rowID = 1;

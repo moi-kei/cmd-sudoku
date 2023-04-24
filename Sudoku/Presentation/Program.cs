@@ -35,9 +35,10 @@ internal class Program
                 {
                     //show game IDs of unfinished games
                     Console.WriteLine("\nGame IDs of unfinished games:");
-                    foreach (string s in DataLayer.GetIncompleteGames())
+                    foreach (SudokuBoard sudoku in DataLayer.GetIncompleteGames())
                     {
-                        Console.WriteLine(s);
+                        Console.WriteLine($"\nGame ID: {sudoku.GameID} Timer: {sudoku.Time}");
+                        sudoku.PrintSudoku();
                     }
                     SudokuBoard? board = SudokuGame.LoadGame(false);
 
@@ -51,10 +52,12 @@ internal class Program
                     Console.WriteLine("\nCouldn't load game");
                 }
             }
+            // load finished game to play it again
             else if(input == "8")
             {
                 try
                 {
+                    // show game IDs of completed games
                     Console.WriteLine("\nGame IDs of finished games:");
                     foreach (string s in DataLayer.GetCompleteGames())
                     {
@@ -72,7 +75,9 @@ internal class Program
                 {
                     Console.WriteLine("\nCouldn't load game");
                 }
+
             }
+            // load a game to replay
             else if (input == "9")
             {
                 try
@@ -95,6 +100,7 @@ internal class Program
                     Console.WriteLine("\nCouldn't load game");
                 }
             }
+            // quit the game
             else if (input == "q")
             {
                 break;
@@ -104,6 +110,7 @@ internal class Program
                 Console.WriteLine("invalid input");
             }
 
+            // set dificulty, ask if user wants a time limit, create new sudoku puzzle
             if(difficulty != "")
             {
                 bool timer = false;
