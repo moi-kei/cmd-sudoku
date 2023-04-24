@@ -135,7 +135,23 @@ namespace Sudoku.Business
                 if (timeLimit != 0 && timeLimit < stopWatch.Elapsed.TotalSeconds/60)
                 {
                     Console.WriteLine("Time's up!");
-                    break;
+                    Console.WriteLine("Do you want to continue? 1 for yes 2 for no");
+
+                    while(true) 
+                    {
+                        var response = Console.ReadLine();
+
+                        if(response == "1")
+                        {
+                            sudoku.TimeLimit = 0;
+                            break;
+                        }
+                        else if(response == "2")
+                        {
+                            sudoku.IsComplete = true;
+                            SaveGame(sudoku, loadedGame, stopWatch.Elapsed.TotalSeconds / 60);
+                        }
+                    }
                 }
 
                 // Display game menu and print the sudoku board
@@ -145,7 +161,7 @@ namespace Sudoku.Business
                 // Take user input and handle different input cases
                 var input = Console.ReadLine();
 
-                //check if input is null
+                // check if input is null
                 if (input == null)
                 {
                     Console.WriteLine("invalid input");
