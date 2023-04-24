@@ -117,7 +117,7 @@ internal class Program
 
                 while (true)
                 {
-                    Console.WriteLine("Do you want to add a time limit to your game? 1 for yes, 2 for no");
+                    Console.WriteLine("\nDo you want to add a time limit to your game? 1 for yes, 2 for no");
                     input = Console.ReadLine();
 
                     if (input == "1")

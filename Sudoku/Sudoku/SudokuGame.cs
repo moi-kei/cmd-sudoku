@@ -105,15 +105,14 @@ namespace Sudoku.Business
             {
                 while (true)
                 {
-                    Console.WriteLine("timed games cannot be saved");
-                    Console.WriteLine("enter a value for the timer in minutes e.g. 5.5 for 5 minutes 30 seconds");
+                    Console.WriteLine("\nenter a value for the timer in minutes e.g. 5.5 for 5 minutes 30 seconds");
                     var input = Console.ReadLine();
 
                     try
                     {
                         if (input != null)
                         {
-                            timeLimit = Double.Parse(input) * 60;
+                            timeLimit = Double.Parse(input);
                             sudoku.TimeLimit = timeLimit;
                             break;
                         }
@@ -132,13 +131,13 @@ namespace Sudoku.Business
             //play the game
             while (sudoku.IsComplete == false)
             {
-                if (timeLimit != 0 && timeLimit < stopWatch.Elapsed.TotalSeconds/60)
+                if (timeLimit != 0 && timeLimit < stopWatch.Elapsed.TotalSeconds / 60)
                 {
                     Console.WriteLine("Time's up!");
-                    Console.WriteLine("Do you want to continue? 1 for yes 2 for no");
 
                     while(true) 
                     {
+                        Console.WriteLine("Do you want to continue? 1 for yes 2 for no");
                         var response = Console.ReadLine();
 
                         if(response == "1")
@@ -150,6 +149,7 @@ namespace Sudoku.Business
                         {
                             sudoku.IsComplete = true;
                             SaveGame(sudoku, loadedGame, stopWatch.Elapsed.TotalSeconds / 60);
+                            goto End;
                         }
                     }
                 }
@@ -217,6 +217,7 @@ namespace Sudoku.Business
                 {
                     Console.WriteLine("invalid input");
                 }
+            End:;
             }
         }
 
