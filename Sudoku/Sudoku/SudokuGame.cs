@@ -5,7 +5,9 @@ namespace Sudoku.Business
 {
     internal static class SudokuGame
     {
-        /// <summary>Saves the game.</summary>
+        /// <summary>
+        /// Saves the game.
+        /// </summary>
         /// <param name="sudoku">The sudoku.</param>
         /// <param name="loadedGame">if set to <c>true</c> [loaded game].</param>
         public static void SaveGame(SudokuBoard sudoku, bool loadedGame, double time)
@@ -45,7 +47,9 @@ namespace Sudoku.Business
             }
         }
 
-        /// <summary>Loads the game.</summary>
+        /// <summary>
+        /// Loads the game.
+        /// </summary>
         /// <param name="replay">if set to <c>true</c> [replay].</param>
         /// <returns>loaded game if it exists else null;</returns>
         public static SudokuBoard? LoadGame(bool replay)
@@ -85,7 +89,9 @@ namespace Sudoku.Business
         }
 
 
-        /// <summary>Plays the game.</summary>
+        /// <summary>
+        /// Plays the game.
+        /// </summary>
         /// <param name="sudoku">The sudoku.</param>
         /// <param name="loadedGame">if set to <c>true</c> [loaded game].</param>
         /// /// <param name="timer">if set to <c>true</c> [timer].</param>
@@ -198,7 +204,9 @@ namespace Sudoku.Business
             }
         }
 
-        /// <summary>Replays the game step by step.</summary>
+        /// <summary>
+        /// Replays the game step by step.
+        /// </summary>
         /// <param name="sudoku">The sudoku.</param>
         public static void ReplayGame(SudokuBoard sudoku)
         {
@@ -225,7 +233,9 @@ namespace Sudoku.Business
             Console.WriteLine("\nReplay complete");
         }
 
-        /// <summary>Displays the game menu.</summary>
+        /// <summary>
+        /// Displays the game menu.
+        /// </summary>
         private static void GameMenu()
         {
             Console.WriteLine("\nenter a number with the form [column][row][number] (i.e A93)");
@@ -238,7 +248,9 @@ namespace Sudoku.Business
             Console.WriteLine("enter q to exit to main menu\n");
         }
 
-        /// <summary>Displays the replay menu</summary>
+        /// <summary>
+        /// Displays the replay menu
+        /// </summary>
         private static void ReplayMenu()
         {
             Console.WriteLine("\npress enter to step through the game");

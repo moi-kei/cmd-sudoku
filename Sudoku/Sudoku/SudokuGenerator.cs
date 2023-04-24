@@ -5,7 +5,9 @@ class SudokuGenerator
     private readonly int[,] board = new int[9, 9];
     private readonly Random rand = new();
 
-    /// <summary>Generates the completed puzzle.</summary>
+    /// <summary>
+    /// Generates the completed puzzle.
+    /// </summary>
     /// <param name="difficulty">The difficulty.</param>
     /// <returns>An 81 character string with the completed sudoku puzzle.</returns>
     public string GeneratePuzzle(string difficulty)
@@ -27,7 +29,9 @@ class SudokuGenerator
         return completePuzzle;
     }
 
-    /// <summary>Fills the board.</summary>
+    /// <summary>
+    /// Fills the board.
+    /// </summary>
     /// <param name="row">The row.</param>
     /// <param name="col">The column.</param>
     /// <returns>A 2D array with the completed sudoku</returns>
@@ -71,7 +75,9 @@ class SudokuGenerator
         return false;
     }
 
-    /// <summary>Checks if the number in the square is a valid input</summary>
+    /// <summary>
+    /// Checks if the number in the square is a valid input
+    /// </summary>
     /// <param name="row">The row.</param>
     /// <param name="col">The column.</param>
     /// <param name="value">The value.</param>
@@ -104,7 +110,9 @@ class SudokuGenerator
         return true;
     }
 
-    /// <summary>Shuffles the values.</summary>
+    /// <summary>
+    /// Shuffles the values.
+    /// </summary>
     /// <returns>an array with the values shuffled</returns>
     private int[] ShuffleValues()
     {
@@ -166,7 +174,9 @@ class SudokuGenerator
         return sb.ToString();
     }
 
-    /// <summary>Converts the difficult into an array of 2 ints which represents the cariance of numbers removed from the completed puzzle</summary>
+    /// <summary>
+    /// Converts the difficult into an array of 2 ints which represents the cariance of numbers removed from the completed puzzle
+    /// </summary>
     /// <param name="difficulty">The difficulty.</param>
     /// <returns>An array of 2 integers</returns>
     private static int[] GameDifficulty(string difficulty)

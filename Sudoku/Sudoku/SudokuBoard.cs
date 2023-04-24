@@ -34,6 +34,12 @@ namespace Sudoku.Business
         /// </value>
         public string Board { get; set; }
 
+        /// <summary>
+        /// Gets or sets the time.
+        /// </summary>
+        /// <value>
+        /// The time.
+        /// </value>
         public double Time { get; set; }
 
         public double TimeLimit { get; set; }
@@ -48,8 +54,11 @@ namespace Sudoku.Business
         /// </summary>
         private readonly List<string> undoneMoves;
 
-        /// <summary>Initializes a new instance of the <see cref="SudokuBoard" /> class.</summary>
-        /// <param name="difficulty">The difficulty.</param>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SudokuBoard" /> class.
+        /// </summary>
+        /// <param name="difficulty">
+        /// The difficulty.</param>
         public SudokuBoard(string difficulty)
         {
             //generate a new sudoku puzzle from scratch
@@ -67,8 +76,10 @@ namespace Sudoku.Business
             startingNumbers = GetStartingNumbers(Board);
         }
 
-        /// <summary>Initializes a new instance of the <see cref="SudokuBoard" /> class.
-        /// For loading games from csv file.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SudokuBoard" /> class.
+        /// For loading games from csv file.
+        /// </summary>
         /// <param name="id">The identifier.</param>
         /// <param name="isComplete">if set to <c>true</c> [is complete].</param>
         /// <param name="gameHistory">The game history.</param>
@@ -110,7 +121,9 @@ namespace Sudoku.Business
             }
         }
 
-        /// <summary>Prints the sudoku.</summary>
+        /// <summary>
+        /// Prints the sudoku.
+        /// </summary>
         public void PrintSudoku()
         {
             // print headers
@@ -173,7 +186,9 @@ namespace Sudoku.Business
             }
         }
 
-        /// <summary>Checks the sudoku.</summary>
+        /// <summary>
+        /// Checks the sudoku.
+        /// </summary>
         /// <returns>false if puzzle is incomplete true if complete</returns>
         public bool CheckSudoku()
         {
@@ -263,7 +278,9 @@ namespace Sudoku.Business
             return true;
         }
 
-        /// <summary>Adds the entry into the sudoku.</summary>
+        /// <summary>
+        /// Adds the entry into the sudoku.
+        /// </summary>
         /// <param name="input">The input.</param>
         public void AddEntry(string input)
         {
@@ -298,7 +315,9 @@ namespace Sudoku.Business
             }
         }
 
-        /// <summary>Gets the moves.</summary>
+        /// <summary>
+        /// Gets the moves.
+        /// </summary>
         /// <returns>A list of stages of the game</returns>
         public List<string> GetMoves()
         {
@@ -367,7 +386,9 @@ namespace Sudoku.Business
             }
         }
 
-        /// <summary>records the numbers that were on the board at the beginning so the game knows they can't be changed</summary>
+        /// <summary>
+        /// records the numbers that were on the board at the beginning so the game knows they can't be changed
+        /// </summary>
         /// <param name="startingBoard">The starting board.</param>
         /// <returns>returns a string of 0's if the square is blank or 1's if the square is filled</returns>
         private static string GetStartingNumbers(String startingBoard)
@@ -387,7 +408,9 @@ namespace Sudoku.Business
             return str.ToString();
         }
 
-        /// <summary>Changes column header to an int.</summary>
+        /// <summary>
+        /// Changes column header to an int.
+        /// </summary>
         /// <param name="header">The header.</param>
         /// <returns>an integer i.e. A = 0</returns>
         public static int ColumnToInt(char header)

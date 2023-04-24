@@ -10,7 +10,9 @@ namespace Sudoku.Data
     internal class DataLayer
     {
 
-        /// <summary>Saves the game of sudoku to the csv file</summary>
+        /// <summary>
+        /// Saves the game of sudoku to the csv file
+        /// </summary>
         /// <param name="sudoku">The board that is being saved</param>
         /// <param name="loadedGame">boolean indicating wether the game had been loaded or is a new game</param>
         public static void SaveGame(SudokuBoard sudoku, bool loadedGame, string gameType)
@@ -42,7 +44,9 @@ namespace Sudoku.Data
             }
         }
 
-        /// <summary>Loads the game.</summary>
+        /// <summary>
+        /// Loads the game.
+        /// </summary>
         /// <param name="iD">The i d.</param>
         /// <param name="replay">if set to <c>true</c> [replay].</param>
         /// <returns>returns the sudokuBoard if it exists else it returns null</returns>
@@ -84,7 +88,9 @@ namespace Sudoku.Data
             return null;
         }
 
-        /// <summary>Gets the identifier.</summary>
+        /// <summary>
+        /// Gets the identifier.
+        /// </summary>
         /// <returns>the Id value for the new game</returns>
         public static int GetID()
         {
@@ -102,7 +108,9 @@ namespace Sudoku.Data
             }
         }
 
-        /// <summary>Getsthe incomplete games.</summary>
+        /// <summary>
+        /// Getsthe incomplete games.
+        /// </summary>
         /// <returns>a List of strings showing incomplete games</returns>
         public static List<string> GetIncompleteGames()
         {
@@ -120,7 +128,9 @@ namespace Sudoku.Data
             return incompleteGames;
         }
 
-        /// <summary>Gets the complete games.</summary>
+        /// <summary>
+        /// Gets the complete games.
+        /// </summary>
         /// <returns>a list of string showing all competed games</returns>
         public static List<string> GetCompleteGames()
         {
@@ -138,7 +148,9 @@ namespace Sudoku.Data
             return completeGames;
         }
 
-        /// <summary>Sudokus to CSV.</summary>
+        /// <summary>
+        /// Converts the sudoku object to csv form
+        /// .</summary>
         /// <param name="sudoku">The SudokuBoard.</param>
         /// <returns>a string representing the game in a form compatible with csv</returns>
         private static string SudokuToCSV(SudokuBoard sudoku, string gameType)
