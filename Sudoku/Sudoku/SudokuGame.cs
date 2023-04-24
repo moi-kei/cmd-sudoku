@@ -8,7 +8,7 @@ namespace Sudoku.Business
         /// <summary>Saves the game.</summary>
         /// <param name="sudoku">The sudoku.</param>
         /// <param name="loadedGame">if set to <c>true</c> [loaded game].</param>
-        public static void SaveGame(SudokuBoard sudoku, bool loadedGame)
+        public static void SaveGame(SudokuBoard sudoku, bool loadedGame, double time)
         {
             // Check if the Sudoku board is null
             if (sudoku is null)
@@ -17,6 +17,7 @@ namespace Sudoku.Business
             }
             else
             {
+                sudoku.Time += time;
                 // Loop until the user enters a valid input
                 while (true)
                 {
@@ -83,105 +84,41 @@ namespace Sudoku.Business
             }
         }
 
+
         /// <summary>Plays the game.</summary>
         /// <param name="sudoku">The sudoku.</param>
         /// <param name="loadedGame">if set to <c>true</c> [loaded game].</param>
-        public static void PlayGame(SudokuBoard sudoku, bool loadedGame)
+        /// /// <param name="timer">if set to <c>true</c> [timer].</param>
+        /// 
+        public static void PlayGame(SudokuBoard sudoku, bool loadedGame, bool timer)
         {
-            while (sudoku.IsComplete == false)
-            {
-                // Display game menu and print the sudoku board
-                GameMenu();
-                sudoku.PrintSudoku();
-                // Take user input and handle different input cases
-                var input = Console.ReadLine();
+            // get user to input a time limit
+            double timeLimit = 0;
 
-                //check if input is null
-                if (input == null)
+            if (timer)
+            {
+                while (true)
                 {
-                    Console.WriteLine("invalid input");
-                }
-                // Try to add user input to the sudoku board as a new entry
-                else if (input.Length > 1)
-                {
+                    Console.WriteLine("timed games cannot be saved");
+                    Console.WriteLine("enter a value for the timer in minutes e.g. 5.5 for 5 minutes 30 seconds");
+                    var input = Console.ReadLine();
+
                     try
                     {
-                        sudoku.AddEntry(input);
+                        if (input != null)
+                        {
+                            timeLimit = Double.Parse(input) * 60;
+                            sudoku.TimeLimit = timeLimit;
+                            break;
+                        }
                     }
                     catch
                     {
-                        Console.WriteLine("invalid input");
+                        Console.WriteLine("timer invalid");
                     }
-                }
-                // Check if the sudoku board is completed correctly
-                else if (input == "c")
-                {
-                    if (sudoku.CheckSudoku() == true)
-                    {
-                        Console.WriteLine("\nGame Completed");
-                        sudoku.IsComplete = true;
-                        SudokuGame.SaveGame(sudoku, loadedGame);
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nGame not Completed");
-                    }
-                }
-                // Undo last action on the sudoku board
-                else if (input == "u")
-                {
-                    sudoku.Undo();
-                }
-                // Redo last undone action on the sudoku board
-                else if (input == "i")
-                {
-                    sudoku.Redo();
-                }
-                // Restart the sudoku board
-                else if (input == "r")
-                {
-                    sudoku.Restart();
-                }
-                // Quit the game and ask to save the current state of the sudoku board
-                else if (input == "q")
-                {
-                    SudokuGame.SaveGame(sudoku, loadedGame);
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("invalid input");
                 }
             }
-        }
 
-        /// <summary>Plays the game.</summary>
-        /// <param name="sudoku">The sudoku.</param>
-        /// 
-        public static void PlayTimedGame(SudokuBoard sudoku)
-        {
-            // get user to input a time limit
-            int timeLimit;
-            while (true) 
-            {
-                Console.WriteLine("timed games cannot be saved");
-                Console.WriteLine("enter a value for the timer in seconds e.g. 300 for 5 minute timer");
-                var input = Console.ReadLine();
-
-                try
-                {
-                    if (input != null) 
-                    { 
-                        timeLimit = Int32.Parse(input);
-                        break;
-                    }
-                }
-                catch
-                {
-                    Console.WriteLine("timer invalid");
-                }
-            }
- 
             // start stopwatch 
             Stopwatch stopWatch = new();
             stopWatch.Start();
@@ -189,7 +126,7 @@ namespace Sudoku.Business
             //play the game
             while (sudoku.IsComplete == false)
             {
-                if (timeLimit < stopWatch.Elapsed.TotalSeconds)
+                if (timeLimit != 0 && timeLimit < stopWatch.Elapsed.TotalSeconds/60)
                 {
                     Console.WriteLine("Time's up!");
                     break;
@@ -197,7 +134,7 @@ namespace Sudoku.Business
 
                 // Display game menu and print the sudoku board
                 GameMenu();
-                Console.WriteLine($"Time: {stopWatch.Elapsed.TotalSeconds}");
+                Console.WriteLine($"Time: {Math.Round(stopWatch.Elapsed.TotalSeconds/60 + sudoku.Time, 2)} minutes");
                 sudoku.PrintSudoku();
                 // Take user input and handle different input cases
                 var input = Console.ReadLine();
@@ -226,6 +163,7 @@ namespace Sudoku.Business
                     {
                         Console.WriteLine("\nGame Completed");
                         sudoku.IsComplete = true;
+                        SudokuGame.SaveGame(sudoku, loadedGame, stopWatch.Elapsed.TotalSeconds / 60);
                     }
                     else
                     {
@@ -250,6 +188,7 @@ namespace Sudoku.Business
                 // Quit the game and ask to save the current state of the sudoku board
                 else if (input == "q")
                 {
+                    SudokuGame.SaveGame(sudoku, loadedGame, stopWatch.Elapsed.TotalSeconds / 60);
                     break;
                 }
                 else
@@ -286,18 +225,6 @@ namespace Sudoku.Business
             Console.WriteLine("\nReplay complete");
         }
 
-        /// <summary>Displays the main menu.</summary>
-        public static void MainMenu()
-        {
-            Console.WriteLine("\nenter 1 for easy");
-            Console.WriteLine("enter 2 for medium");
-            Console.WriteLine("enter 3 for hard");
-            Console.WriteLine("enter 7 to load unfinished game");
-            Console.WriteLine("enter 8 to replay a finished game");
-            Console.WriteLine("enter 9 to the sequence of moves from an old game");
-            Console.WriteLine("enter q to exit\n");
-        }
-
         /// <summary>Displays the game menu.</summary>
         private static void GameMenu()
         {
@@ -312,7 +239,7 @@ namespace Sudoku.Business
         }
 
         /// <summary>Displays the replay menu</summary>
-        public static void ReplayMenu()
+        private static void ReplayMenu()
         {
             Console.WriteLine("\npress enter to step through the game");
             Console.WriteLine("enter b to go back");

@@ -62,7 +62,7 @@ namespace Sudoku.Data
 
                     Console.WriteLine(splitLine[1]);
 
-                    if (splitLine[1] == "3" && splitLine[2] == "1")
+                    if (splitLine[1] == "1")
                     {
                         isComplete = true;
                     }
@@ -72,12 +72,12 @@ namespace Sudoku.Data
                     }
 
                     List<string> lines = new();
-                    for (int i = 3; i < splitLine.Length; i++)
+                    for (int i = 4; i < splitLine.Length; i++)
                     {
                         lines.Add(splitLine[i]);
                     }
 
-                    SudokuBoard loadedGame = new(gameID, isComplete, lines, replay);
+                    SudokuBoard loadedGame = new(gameID, isComplete, lines, replay, Double.Parse(splitLine[2]), Double.Parse(splitLine[3]));
                     return loadedGame;
                 }
             }
@@ -112,7 +112,7 @@ namespace Sudoku.Data
             {
                 var line = reader.ReadLine();
                 var splitLine = line!.Split(',');
-                if (splitLine[1] == "3" && splitLine[2].Equals("0"))
+                if (splitLine[1].Equals("0"))
                 {
                     incompleteGames.Add(splitLine[0]);
                 }              
@@ -130,7 +130,7 @@ namespace Sudoku.Data
             {
                 var line = reader.ReadLine();
                 var splitLine = line!.Split(',');
-                if (splitLine[1] == "3" && splitLine[2] == "1")
+                if (splitLine[1] == "1")
                 {
                     completeGames.Add(splitLine[0]);
                 }
@@ -153,7 +153,7 @@ namespace Sudoku.Data
             {
                 isComplete = 0;
             }
-            string csvOutput = $"{sudoku.GameID},{gameType},{isComplete}";
+            string csvOutput = $"{sudoku.GameID},{isComplete},{sudoku.Time},{sudoku.TimeLimit}";
 
             foreach (string s in sudoku.GetMoves())
             {

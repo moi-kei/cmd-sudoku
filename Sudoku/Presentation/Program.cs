@@ -12,10 +12,10 @@ internal class Program
 
         while (true)
         {
-            SudokuGame.MainMenu();
+            MainMenu();
             var input = Console.ReadLine();
             string difficulty = "";
-
+            // get difficulty from user
             if (input == "1")
             {
                 difficulty = "easy";
@@ -28,10 +28,12 @@ internal class Program
             {
                 difficulty = "hard";
             }
+            // load unfinished game
             else if(input == "7")
             {
                 try
                 {
+                    //show game IDs of unfinished games
                     Console.WriteLine("\nGame IDs of unfinished games:");
                     foreach (string s in DataLayer.GetIncompleteGames())
                     {
@@ -41,7 +43,7 @@ internal class Program
 
                     if (board != null )
                     {
-                        SudokuGame.PlayGame(board, true);
+                        SudokuGame.PlayGame(board, true, false);
                     }
                 }
                 catch
@@ -63,7 +65,7 @@ internal class Program
 
                     if (board != null)
                     {
-                        SudokuGame.PlayGame(board, false);
+                        SudokuGame.PlayGame(board, false, false);
                     }
                 }
                 catch
@@ -122,18 +124,21 @@ internal class Program
                         break;
                     }
                 }
-
-                if (timer == true)
-                {
-                    SudokuBoard board = new(difficulty);
-                    SudokuGame.PlayTimedGame(board);
-                }
-                else if (timer == false)
-                {
-                    SudokuBoard board = new(difficulty);
-                    SudokuGame.PlayGame(board, false);
-                }
+                SudokuBoard board = new(difficulty);
+                SudokuGame.PlayGame(board, false, timer);
             }
         }
+    }
+
+    /// <summary>Displays the main menu.</summary>
+    private static void MainMenu()
+    {
+        Console.WriteLine("\nenter 1 for easy");
+        Console.WriteLine("enter 2 for medium");
+        Console.WriteLine("enter 3 for hard");
+        Console.WriteLine("enter 7 to load unfinished game");
+        Console.WriteLine("enter 8 to replay a finished game");
+        Console.WriteLine("enter 9 to the sequence of moves from an old game");
+        Console.WriteLine("enter q to exit\n");
     }
 }

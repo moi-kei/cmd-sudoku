@@ -34,6 +34,10 @@ namespace Sudoku.Business
         /// </value>
         public string Board { get; set; }
 
+        public double Time { get; set; }
+
+        public double TimeLimit { get; set; }
+
         /// <summary>
         /// The game history
         /// </summary>
@@ -55,6 +59,8 @@ namespace Sudoku.Business
             GameID = DataLayer.GetID().ToString();
             //set isComplete to false and instatiate the lists
             IsComplete = false;
+            Time = 0;
+            TimeLimit = 0;
             gameHistory = new List<string>{Board};
             undoneMoves = new List<string>();
             //record the starting numbers
@@ -67,7 +73,7 @@ namespace Sudoku.Business
         /// <param name="isComplete">if set to <c>true</c> [is complete].</param>
         /// <param name="gameHistory">The game history.</param>
         /// <param name="replay">if set to <c>true</c> [replay].</param>
-        public SudokuBoard(string id, bool isComplete, List<string> gameHistory, bool replay)
+        public SudokuBoard(string id, bool isComplete, List<string> gameHistory, bool replay, double time, double timeLimit)
         {
             // record starting numbers from the first entry in the gameHistory
             startingNumbers = GetStartingNumbers(gameHistory[0]);
@@ -81,6 +87,8 @@ namespace Sudoku.Business
                 GameID = id;
                 this.gameHistory = gameHistory;
                 Board = gameHistory.Last();
+                Time = time;
+                TimeLimit = timeLimit;
             }
             // if the game is complete
             else
@@ -89,6 +97,8 @@ namespace Sudoku.Business
                 this.IsComplete = false;
                 GameID = DataLayer.GetID().ToString();
                 Board = gameHistory[0];
+                time = 0;
+                TimeLimit = 0;
                 if (replay == true)
                 {
                     this.gameHistory = gameHistory;
