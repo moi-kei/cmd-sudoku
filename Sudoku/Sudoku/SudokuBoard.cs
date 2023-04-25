@@ -290,6 +290,8 @@ namespace Sudoku.Business
             char entry = input[2];
             // get the index of the number entered
             int index = row * 9 + column - 9;
+            // reset undoneMoves
+            undoneMoves.Clear();
 
             // check the number is not a starting number
             if (startingNumbers[index] == '0')
