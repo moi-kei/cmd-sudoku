@@ -165,6 +165,6 @@ internal class Program
         Console.WriteLine("enter 8 to replay a finished game");
         Console.WriteLine("enter 9 to the sequence of moves from an old game");
         Console.WriteLine("enter q to exit\n");
-        Console.WriteLine("enter ! to clear save file");
+        Console.WriteLine("enter ! to clear save file\n");
     }
 }

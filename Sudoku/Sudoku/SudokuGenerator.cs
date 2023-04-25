@@ -13,7 +13,7 @@ class SudokuGenerator
     public string GeneratePuzzle(string difficulty)
     {
         // Fill the Sudoku board with valid numbers
-        FillPuzzle(0, 0);
+        GenerateCompletePuzzle(0, 0);
         // Create a StringBuilder to hold the generated Sudoku puzzle
         StringBuilder sb = new();
         // Iterate over the Sudoku board to append each value to the StringBuilder
@@ -35,7 +35,7 @@ class SudokuGenerator
     /// <param name="row">The row.</param>
     /// <param name="column">The column.</param>
     /// <returns>A 2D array with the completed sudoku</returns>
-    private bool FillPuzzle(int row, int column)
+    private bool GenerateCompletePuzzle(int row, int column)
     {
         // If we have filled in all columns of the current row, move to the next row
 
@@ -58,12 +58,12 @@ class SudokuGenerator
         foreach (int value in values)
         {
             // If the current value is a valid input for the current position, fill it in and recursively try to fill in the next position
-            if (IsValid(row, column, value))
+            if (CheckSquare(row, column, value))
             {
                 board[row, column] = value;
 
                 // If the next position is successfully filled, we can return true
-                if (FillPuzzle(row, column + 1))
+                if (GenerateCompletePuzzle(row, column + 1))
                 {
                     return true;
                 }
@@ -83,7 +83,7 @@ class SudokuGenerator
     /// <param name="value">The value.</param>
     /// <returns>
     ///   <c>true</c> if the specified row is valid; otherwise, <c>false</c>.</returns>
-    private bool IsValid(int row, int column, int value)
+    private bool CheckSquare(int row, int column, int value)
     {
         // Check if the value already exists in the row or column
         for (int i = 0; i < 9; i++)
@@ -144,21 +144,21 @@ class SudokuGenerator
     {
         if (minNumOfCharsToReplace >= inputString.Length || maxNumOfCharsToReplace >= inputString.Length || minNumOfCharsToReplace > maxNumOfCharsToReplace)
         {
-            //return the original input string if the range is invalid
+            // return the original input string if the range is invalid
             return inputString;
         }
 
         StringBuilder sb = new(inputString);
-        //create a new instance of Random class to generate random indices
+        // create a new instance of Random class to generate random indices
         Random rnd = new();
-        //generate a random number between min and max range
+        // generate a random number between min and max range
         int numOfCharsToReplace = rnd.Next(minNumOfCharsToReplace, maxNumOfCharsToReplace + 1);
 
         for (int i = 0; i < numOfCharsToReplace; i++)
         {
-            //generate a random index to replace in the StringBuilder object
+            // generate a random index to replace in the StringBuilder object
             int indexToReplace = rnd.Next(0, sb.Length);
-            //check if the square is not already blank to avoid the same number being removed more than once
+            // check if the square is not already blank to avoid the same number being removed more than once
 
             if (sb[indexToReplace] != ' ')
             {
@@ -183,16 +183,19 @@ class SudokuGenerator
     {
         int[] diff = new int[2];
 
+        // removes 40 - 45 for easy
         if (difficulty == "easy")
         {
             diff[0] = 40;
             diff[1] = 45;
         }
+        // removes 45 - 50 for medium
         else if (difficulty == "medium")
         {
             diff[0] = 45;
             diff[1] = 50;
         }
+        // removes 50 - 55 for hard
         else if (difficulty == "hard")
         {
             diff[0] = 50;
