@@ -38,7 +38,7 @@ internal class Program
                     Console.WriteLine("\nGame IDs of unfinished games:");
                     foreach (SudokuBoard sudoku in DataLayer.GetIncompleteGames())
                     {
-                        Console.WriteLine($"\nGame ID: {sudoku.GameID} Timer: {sudoku.Time}");
+                        Console.WriteLine($"\nGame ID: {sudoku.GameID} Timer: {sudoku.Time} minutes");
                         sudoku.PrintSudoku();
                     }
                     SudokuBoard? board = SudokuGame.LoadGame(false);

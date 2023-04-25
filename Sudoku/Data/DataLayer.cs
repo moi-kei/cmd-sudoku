@@ -145,7 +145,7 @@ namespace Sudoku.Data
                 var splitLine = line!.Split(',');
                 if (splitLine[1] == "1")
                 {
-                    string sudoku = $"GameID: {splitLine[0]} Completion time: {splitLine[2]}";
+                    string sudoku = $"GameID: {splitLine[0]} Completion time: {splitLine[2]} minutes";
                     if (sudoku != null)
                     {
                         games.Add(sudoku);
