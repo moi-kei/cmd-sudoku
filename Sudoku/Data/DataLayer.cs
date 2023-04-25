@@ -172,7 +172,7 @@ namespace Sudoku.Data
             {
                 isComplete = 0;
             }
-            string csvOutput = $"{sudoku.GameID},{isComplete},{sudoku.Time},{sudoku.TimeLimit}";
+            string csvOutput = $"{sudoku.GameID},{isComplete},{Math.Round(sudoku.Time,2)},{sudoku.TimeLimit}";
 
             foreach (string s in sudoku.GetMoves())
             {
