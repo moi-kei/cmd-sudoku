@@ -179,5 +179,13 @@ namespace Sudoku.Data
             }
             return csvOutput;
         }
+
+        /// <summary>
+        /// Erases the data.
+        /// </summary>
+        public static void EraseData()
+        {
+            System.IO.File.WriteAllText(@"GameHistory.csv", string.Empty);
+        }
     }
 }

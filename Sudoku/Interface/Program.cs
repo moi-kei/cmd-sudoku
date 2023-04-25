@@ -1,5 +1,6 @@
 ﻿using Sudoku.Business;
 using Sudoku.Data;
+using System.ComponentModel.Design;
 
 internal class Program
 {
@@ -105,11 +106,28 @@ internal class Program
             {
                 break;
             }
+            else if (input == "!")
+            {
+                while (true)
+                {
+                    Console.WriteLine("Are you sure you want to erase save data?");
+                    Console.WriteLine("This cannot be undone \n 1 for yes 2 for no"); ;
+                    input = Console.ReadLine();
+
+                    if (input == "1")
+                    {
+                        DataLayer.EraseData();
+                    }
+                    else if (input == "2")
+                    {
+                        break;
+                    }
+                }
+            }
             else
             {
                 Console.WriteLine("invalid input");
             }
-
             // set dificulty, ask if user wants a time limit, create new sudoku puzzle
             if(difficulty != "")
             {
@@ -147,5 +165,6 @@ internal class Program
         Console.WriteLine("enter 8 to replay a finished game");
         Console.WriteLine("enter 9 to the sequence of moves from an old game");
         Console.WriteLine("enter q to exit\n");
+        Console.WriteLine("enter ! to clear save file");
     }
 }
