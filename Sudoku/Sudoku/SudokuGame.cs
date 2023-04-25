@@ -31,7 +31,7 @@ namespace Sudoku.Business
                     if (input == "1")
                     {
                         // Save the game too the csv using the DataLayer class
-                        DataLayer.SaveGame(sudoku, loadedGame, "3");
+                        DataLayer.SaveGame(sudoku, loadedGame);
                         break;
                     }
                     // Check if the user does not want to save the game

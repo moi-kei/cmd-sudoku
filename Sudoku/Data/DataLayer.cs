@@ -1,4 +1,5 @@
 ﻿using Sudoku.Business;
+using System.IO;
 using System.Reflection.PortableExecutable;
 
 namespace Sudoku.Data
@@ -16,11 +17,11 @@ namespace Sudoku.Data
         /// </summary>
         /// <param name="sudoku">The board that is being saved</param>
         /// <param name="loadedGame">boolean indicating wether the game had been loaded or is a new game</param>
-        public static void SaveGame(SudokuBoard sudoku, bool loadedGame, string gameType)
+        public static void SaveGame(SudokuBoard sudoku, bool loadedGame)
         {
             if (loadedGame == false)
             {
-                string csvOutput = SudokuToCSV(sudoku, gameType);
+                string csvOutput = SudokuToCSV(sudoku);
 
                 using StreamWriter writer = new(@"GameHistory.csv", true);
                 writer.WriteLine(csvOutput);
@@ -33,7 +34,7 @@ namespace Sudoku.Data
                 {
                     if (lines[i][..1].Equals(sudoku.GameID))
                     {
-                        lines[i] = SudokuToCSV(sudoku, gameType);
+                        lines[i] = SudokuToCSV(sudoku);
                     }
                 }
 
@@ -159,7 +160,7 @@ namespace Sudoku.Data
         /// .</summary>
         /// <param name="sudoku">The SudokuBoard.</param>
         /// <returns>a string representing the game in a form compatible with csv</returns>
-        private static string SudokuToCSV(SudokuBoard sudoku, string gameType)
+        private static string SudokuToCSV(SudokuBoard sudoku)
         {
             int isComplete;
 
@@ -181,11 +182,13 @@ namespace Sudoku.Data
         }
 
         /// <summary>
-        /// Erases the data.
+        /// Erases the save game data.
         /// </summary>
         public static void EraseData()
         {
-            System.IO.File.WriteAllText(@"GameHistory.csv", string.Empty);
+            using FileStream file = File.Open(@"GameHistory.csv", FileMode.Open);
+            file.SetLength(0);
+            file.Close();
         }
     }
 }
