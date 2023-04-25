@@ -13,7 +13,7 @@ class SudokuGenerator
     public string GeneratePuzzle(string difficulty)
     {
         // Fill the Sudoku board with valid numbers
-        FillBoard(0, 0);
+        FillPuzzle(0, 0);
         // Create a StringBuilder to hold the generated Sudoku puzzle
         StringBuilder sb = new();
         // Iterate over the Sudoku board to append each value to the StringBuilder
@@ -33,15 +33,15 @@ class SudokuGenerator
     /// Fills the board.
     /// </summary>
     /// <param name="row">The row.</param>
-    /// <param name="col">The column.</param>
+    /// <param name="column">The column.</param>
     /// <returns>A 2D array with the completed sudoku</returns>
-    private bool FillBoard(int row, int col)
+    private bool FillPuzzle(int row, int column)
     {
         // If we have filled in all columns of the current row, move to the next row
 
-        if (col == 9)
+        if (column == 9)
         {
-            col = 0;
+            column = 0;
             row++;
 
             // If we have filled in all rows, the board is filled and we can return true
@@ -58,12 +58,12 @@ class SudokuGenerator
         foreach (int value in values)
         {
             // If the current value is a valid input for the current position, fill it in and recursively try to fill in the next position
-            if (IsValid(row, col, value))
+            if (IsValid(row, column, value))
             {
-                board[row, col] = value;
+                board[row, column] = value;
 
                 // If the next position is successfully filled, we can return true
-                if (FillBoard(row, col + 1))
+                if (FillPuzzle(row, column + 1))
                 {
                     return true;
                 }
@@ -71,7 +71,7 @@ class SudokuGenerator
         }
 
         // If none of the values are valid inputs for the current position, backtrack and reset the current position to 0
-        board[row, col] = 0;
+        board[row, column] = 0;
         return false;
     }
 
@@ -79,23 +79,23 @@ class SudokuGenerator
     /// Checks if the number in the square is a valid input
     /// </summary>
     /// <param name="row">The row.</param>
-    /// <param name="col">The column.</param>
+    /// <param name="column">The column.</param>
     /// <param name="value">The value.</param>
     /// <returns>
     ///   <c>true</c> if the specified row is valid; otherwise, <c>false</c>.</returns>
-    private bool IsValid(int row, int col, int value)
+    private bool IsValid(int row, int column, int value)
     {
         // Check if the value already exists in the row or column
         for (int i = 0; i < 9; i++)
         {
-            if (board[row, i] == value || board[i, col] == value)
+            if (board[row, i] == value || board[i, column] == value)
             {
                 return false;
             }
         }
         // Check if the value already exists in the 3x3 box that contains the position
         int boxRow = (row / 3) * 3;
-        int boxCol = (col / 3) * 3;
+        int boxCol = (column / 3) * 3;
 
         for (int i = boxRow; i < boxRow + 3; i++)
         {

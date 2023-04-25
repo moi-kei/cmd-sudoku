@@ -369,13 +369,14 @@ namespace Sudoku.Business
             while (true)
             {
                 var input = Console.ReadLine();
-                //id input is 1 return game to starting state
+                //if input is 1 return game to starting state
                 if (input == "1")
                 {
                     gameHistory.Add(Board);
                     Board = gameHistory[0];
                     break;
                 }
+                // if 2 exit
                 else if(input =="2")
                 {
                     break;
@@ -397,10 +398,12 @@ namespace Sudoku.Business
             StringBuilder str = new();
             foreach (char c in startingBoard)
             {
+                // if the square is empty append 0
                 if (c == ' ')
                 {
                     str.Append('0');
                 }
+                //if it's filled append a 1
                 else
                 {
                     str.Append('1');
@@ -419,6 +422,7 @@ namespace Sudoku.Business
             char[] rows = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I' };
             int value = -1;
 
+            // iterate over list untile it finds a match
             for (int i = 0; i < rows.Length; ++i)
             {
                 if (header == rows[i])
@@ -426,6 +430,7 @@ namespace Sudoku.Business
                     value = i;
                 }
             }
+            // return the index
             return value;
         }
     }
